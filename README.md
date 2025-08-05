@@ -18,6 +18,10 @@ Install TypeScript:
 ```
 pnpm i -D typescript  @types/express @types/node ts-node-dev
 ```
+Install dotenv:
+```
+npm install express dotenv --save
+```
 # Create Directory
 ![Dir](public/images/dir.png)
 
@@ -38,7 +42,19 @@ Edit tsconfig.json:
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": ["src/**/*", "server.ts", "index.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
 ```
-# Simple Project Development Process
+Edit package.json:
+```
+"scripts": {
+    "build": "npx tsc -p",
+    "start": "node app.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts"
+  },
+```
+# Development Process
+Init
+Create http responses (test with response text and static object)
