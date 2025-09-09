@@ -1,5 +1,7 @@
 $${\color{red}////////}$$
 
+Credit: Nguyen Ngoc Nhan
+
 # Stack
 <img src="https://img.shields.io/badge/MongoDB-47A248?logo=Mongodb&logoColor=white&style=for-the-badge" /><img src="https://img.shields.io/badge/Express-000000?logo=Express&logoColor=white&style=for-the-badge" /><img src="https://img.shields.io/badge/React-61DAFB?logo=React&logoColor=white&style=for-the-badge" /><img src="https://img.shields.io/badge/Node-5FA04E?logo=nodedotjs&logoColor=white&style=for-the-badge" />
 # Dependencies
@@ -55,6 +57,6 @@ Edit package.json:
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts"
   },
 ```
-# Development Process
-Init
-Create http responses (test with response text and static object)
+# Development
+
+Routing in app.ts
