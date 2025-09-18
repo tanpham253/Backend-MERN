@@ -1,9 +1,9 @@
-# User Story cho **Admin** (React Admin)
+# User Story cho **Customer**
 
 
 ## 🎯 **Story ID:** `CU-001`
 
-**Tiêu đề:** Quản lý danh sác sản phẩm
+**Tiêu đề:** Xem và mua sản phẩm
 
 **User Story:**
 👉 “Là một khách hàng, tôi muốn xem và mua sản phẩm để đáp ứng nhu cầu của mình.”
@@ -20,7 +20,7 @@
 
 * **Backend API**:
 
-* `GET v1/products` chỉ trả về sản phẩm đang bán.
-* `GET v1/products/:id` xem chi tiết sản phẩm.
-* `POST v1/cart` thêm sản phẩm vào giỏ.
-* `POST v1/orders` đơn hàng.
+ * `GET v1/products` chỉ trả về sản phẩm đang bán.
+ * `GET v1/products/:id` xem chi tiết sản phẩm.
+ * `POST v1/cart` thêm sản phẩm vào giỏ.
+ * `POST v1/orders` đơn hàng.
