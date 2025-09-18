@@ -2,40 +2,39 @@ import createError from "http-errors";
 import Category from "../models/categories.model";
 
 const findAll = async () => {
-  const articleDB = await Category.find();
-  return articleDB;
+  const categoryDB = await Category.find();
+  return categoryDB;
 };
 
 const findById = async (id: string) => {
-  const article = await Category.findById(id);
-  if (!article) {
+  const category = await Category.findById(id);
+  if (!category) {
     throw createError(404, "Category not found");
   }
-  return article;
+  return category;
 };
 
 const create = (payload: any) => {
-  const newArticle = new Category({
+  const newCategory = new Category({
     title: payload.title,
     keyword: payload.keyword,
     description: payload.description,
-    content: payload.content,
-    date: payload.date,
+    slug: payload.slug,
   });
-  newArticle.save();
-  return newArticle;
+  newCategory.save();
+  return newCategory;
 };
 
 const updateById = async (id: string, payload: any) => {
     // https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()
-  const updatedArticle = await Category.findByIdAndUpdate(id, payload, {
+  const updatedCategory = await Category.findByIdAndUpdate(id, payload, {
     new: true, // return modified instead
     runValidators: true, // is it valid with model in Category
   });
-  if (!updatedArticle) {
+  if (!updatedCategory) {
     throw createError(404, "Category not found");
   }
-  return updatedArticle;
+  return updatedCategory;
 };
 
 const deleteById = async (id: string) => {
