@@ -1,7 +1,11 @@
 //Import thư viện Express
-import express, { Express, Request, Response } from 'express';
+import express, { NextFunction, Express, Request, Response } from 'express';
 //Khởi tạo một ứng dụng Express
 const app: Express = express();
+
+// categories
+import categoriesRouter from "./routes/v1/categories.route";
+app.use("/api/v1", categoriesRouter); //prefix for module
 
 // fake object
 const products = [
@@ -9,9 +13,6 @@ const products = [
   { id: 2, name: "Sản phẩm 2", price: 200 },
   { id: 3, name: "Sản phẩm 3", price: 300 },
 ];
-
-//Cấu hình cổng server
-const PORT = process.env.PORT || 9000;
 
 // Tạo route đầu tiên cho trang chủ (Home page)
 app.get('/', (req: Request, res: Response) => {
@@ -31,7 +32,15 @@ app.get("/products/:id", (req: Request, res: Response) => {
   }
 });
 
-// Lắng nghe trên cổng PORT
-app.listen(PORT, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+//handle other errors
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.log(err.stack);  // show error and in which line
+  res.status(err.status || 500);
+    res.json({
+        statusCode: err.status || 500,
+        message: err.status || 'Internal Server Error',
+        data: null
+    });
 });
+
+export default app;
