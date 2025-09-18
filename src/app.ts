@@ -5,7 +5,14 @@ const app: Express = express();
 
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
+// products
+import productsRouter from "./routes/v1/products.route";
+// customers
+import customerRouter from "./routes/v1/customers.route";
+
 app.use("/api/v1", categoriesRouter); //prefix for module
+app.use("/api/v1", productsRouter);
+app.use("/api/v1", customerRouter);
 
 // fake object
 const products = [

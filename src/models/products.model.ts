@@ -11,7 +11,10 @@ const productSchema = new Schema(
       minlength: 3,
       maxlength: 255,
     },
-    description: { type: String, required: false, maxlength: 5000 },
+    description: { 
+      type: String, 
+      required: false, 
+      maxlength: 5000 },
     slug: {
       type: String,
       required: true,
