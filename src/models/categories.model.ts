@@ -1,35 +1,29 @@
 import { Schema, model } from "mongoose";
-import { version } from "os";
+
+export interface ICategory {
+    name: string,
+    description?: string,
+    slug: string,
+}
 
 const categorySchema = new Schema(
   {
-    category_name: {
+    name: {
       type: String,
       required: true,
-      unique: true,
-      trim: true,
-      minlength: 3,
-      maxlength: 255,
     },
-    description: { type: String, required: false, maxlength: 5000 },
+    description: { type: String },
     slug: {
       type: String,
       required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-      minlength: 3,
-      maxlength: 255,
     },
-    
   }, // schema options 2nd argument (tham so)
   {
-    timestamps: true, // createdAt, updatedAt
+    timestamps: false, // createdAt, updatedAt
     versionKey: false, // __v
     // collection: "categories", // custom collection name or else default name at the line below
   }
 );
 
-
-const category = model("Category", categorySchema);
-export default category;
+const Category = model("Category", categorySchema);
+export default Category;

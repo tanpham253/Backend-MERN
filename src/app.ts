@@ -3,16 +3,20 @@ import express, { NextFunction, Express, Request, Response } from 'express';
 //Khởi tạo một ứng dụng Express
 const app: Express = express();
 
+// able to parse json
+app.use(express.json()); // to parse json body
+app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
+
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
 // products
 import productsRouter from "./routes/v1/products.route";
 // customers
-import customerRouter from "./routes/v1/customers.route";
+import customersRouter from "./routes/v1/customers.route";
 
 app.use("/api/v1", categoriesRouter); //prefix for module
 app.use("/api/v1", productsRouter);
-app.use("/api/v1", customerRouter);
+app.use("/api/v1", customersRouter);
 
 // fake object
 const products = [

@@ -1,44 +1,41 @@
-import mongoose from 'mongoose'
-import { faker } from '@faker-js/faker';
+import mongoose from "mongoose";
+import { faker } from "@faker-js/faker";
 
-import Category from '../models/categories.model';
+import Category from "../models/categories.model";
 // import Product from '../models/Product.model';
-
 
 //Step 1: Ket noi Database su dung mongoose
 const mongooseDbOptions = {
-    autoIndex: true, // Don't build indexes
-    maxPoolSize: 10, // Maintain up to 10 socket connections
-    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-    family: 4, // Use IPv4, skip trying IPv6
-    
-  };
-  mongoose
-    .connect('mongodb://localhost:27017/Batch193', mongooseDbOptions)
-    .then(() => {
-      console.log('Connected to MongoDB');
-      //should listen app here
-    })
-    .catch((err) => {
-      console.error('Failed to Connect to MongoDB', err);
-    });
-  
+  autoIndex: true, // Don't build indexes
+  maxPoolSize: 10, // Maintain up to 10 socket connections
+  serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  family: 4, // Use IPv4, skip trying IPv6
+};
+mongoose
+  .connect("mongodb://localhost:27017/Batch193", mongooseDbOptions)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    //should listen app here
+  })
+  .catch((err) => {
+    console.error("Failed to Connect to MongoDB", err);
+  });
+
 //step 2: Su dung cac model de ket noi den collection
 const fakeData = async () => {
-
   // insert 5 fake categories
   for (let index = 1; index <= 5; index++) {
     //dien thoai
-    const categoryName = faker.commerce.department()+index;
+    const categoryName = faker.commerce.department() + index;
     const category = new Category({
-      category_name: categoryName,
-       description: faker.lorem.word(10),
-       //dien-thoai
-       slug: faker.helpers.slugify(categoryName),
+      name: categoryName,
+      description: faker.lorem.word(10),
+      //dien-thoai
+      slug: faker.helpers.slugify(categoryName),
     });
     await category.save();
-    console.log('Fake categoryName is success', index);
+    console.log("Fake categoryName is success", index);
   }
 
   //new fake 5 brand
@@ -51,7 +48,7 @@ const fakeData = async () => {
   //   });
   //   await brand.save();
   //   console.log('Fake brand is success', index);
-    
+
   // }
   /*
   // insert 5 fake categories
@@ -97,11 +94,11 @@ const fakeData = async () => {
     
   }
   */
-}
+};
 
 //chay
 try {
   fakeData();
 } catch (error) {
-  console.log('<<=== 🚀 error ===>>',error);
+  console.log("<<=== 🚀 error ===>>", error);
 }

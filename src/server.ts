@@ -11,7 +11,7 @@ app.listen(PORT, () => {
 });
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/Backend-MERN')
+mongoose.connect('mongodb://localhost:27017/Batch193')
 .then(() => {
   console.log("Connected to MongoDB");
 })
