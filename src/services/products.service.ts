@@ -1,5 +1,5 @@
 import createError from "http-errors";
-import Product from "../models/products.model";
+import Product, { IProduct } from "../models/products.model";
 
 const findAll = async () => {
   const productDB = await Product.find();
@@ -30,7 +30,7 @@ const create = (payload: any) => {
   return newProduct;
 };
 
-const updateById = async (id: string, payload: any) => {
+const updateById = async (id: string, payload: IProduct) => {
   // https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()
   const updatedProduct = await Product.findByIdAndUpdate(id, payload, {
     new: true, // return modified instead
@@ -55,5 +55,5 @@ export default {
   findById,
   create,
   updateById,
-  deleteById,
+  deleteById
 };

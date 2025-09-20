@@ -8,13 +8,13 @@ Content-Type: application/json
     "slug": "slug"
 }
 ###
-put http://localhost:8080/api/v1/categories/68cd56081a3be97382b8da4f
+put http://localhost:8080/api/v1/categories/68ce37c4aa4896602f152368
 Content-Type: application/json
 
 {
     "name": "New Category"
 }
 ###
-DELETE http://localhost:8080/api/v1/categories/68cd48a0d5cb067b4e9942a1
+DELETE http://localhost:8080/api/v1/categories/68ce37c4aa4896602f152368
 ###
-get http://localhost:8080/api/v1/categories
+get http://localhost:8080/api/v1/products

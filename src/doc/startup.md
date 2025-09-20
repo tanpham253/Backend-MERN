@@ -107,6 +107,7 @@ service use http-errors to response
 Optional defy common response in helper
 
 ### MongoDB
+use mongoose to interact with models
 ```
 pnpm install mongoose --save
 ```
@@ -137,3 +138,7 @@ Problem in fakerjs: lorem min words fixed
 Queries
 https://mongoosejs.com/docs/queries.html
 find=select
+
+## pagination
+start from controller
+example in service product: find all function

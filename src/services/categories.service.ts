@@ -1,6 +1,7 @@
 import createError from "http-errors";
 import Category, { ICategory } from "../models/categories.model";
 
+// doc on mogoose offical site
 const findAll = async () => {
   const categoryDB = await Category.find();
   return categoryDB;

@@ -48,7 +48,7 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const updatedProduct = await productsService.updateById(id, { isDeleted: true });
+        const updatedProduct = await productsService.deleteById(id);
         sendJsonSuccess(res, updatedProduct);
     } catch (error) {
         next(error);
