@@ -1,5 +1,5 @@
 // cart_items.service.ts
-import CartItem from '../models/cart_items.model';
+import CartItem from '../models/cartItems.model';
 
 export const findAll = async () => {
   return await CartItem.find();

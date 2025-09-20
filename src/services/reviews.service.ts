@@ -1,5 +1,5 @@
 // review.service.ts
-import Review from '../models/review.model';
+import Review from '../models/reviews.model';
 
 export const findAll = async () => {
   return await Review.find();

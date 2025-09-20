@@ -1,6 +1,6 @@
 // review.controller.ts
 import { Request, Response, NextFunction } from 'express';
-import * as reviewService from '../services/review.service';
+import * as reviewService from '../services/reviews.service';
 
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -29,20 +29,28 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const update = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const review = await reviewService.update(req.params.id, req.body);
-    res.json(review);
+    const doc = await reviewService.update(req.params.id, req.body);
+    res.json(doc);
   } catch (error) {
     next(error);
   }
 };
 
-export const remove = async (req: Request, res: Response, next: NextFunction) => {
+export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await reviewService.remove(req.params.id);
     res.status(204).end();
   } catch (error) {
     next(error);
   }
+};
+
+export default {
+    findAll,
+    findById,
+    create,
+    deleteById,
+    updateById
 };

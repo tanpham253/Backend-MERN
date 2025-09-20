@@ -1,5 +1,5 @@
 // discount.service.ts
-import Discount from '../models/discount.model';
+import Discount from '../models/discounts.model';
 
 export const findAll = async () => {
   return await Discount.find();

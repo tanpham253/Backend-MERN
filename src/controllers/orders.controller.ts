@@ -29,20 +29,28 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const update = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const order = await ordersService.update(req.params.id, req.body);
-    res.json(order);
+    const doc = await ordersService.update(req.params.id, req.body);
+    res.json(doc);
   } catch (error) {
     next(error);
   }
 };
 
-export const remove = async (req: Request, res: Response, next: NextFunction) => {
+export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await ordersService.remove(req.params.id);
     res.status(204).end();
   } catch (error) {
     next(error);
   }
+};
+
+export default {
+    findAll,
+    findById,
+    create,
+    deleteById,
+    updateById
 };

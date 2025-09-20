@@ -1,6 +1,6 @@
 // wishlist.controller.ts
 import { Request, Response, NextFunction } from 'express';
-import * as wishlistService from '../services/wishlist.service';
+import * as wishlistService from '../services/wishlists.services';
 
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -29,20 +29,28 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const update = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const wishlist = await wishlistService.update(req.params.id, req.body);
-    res.json(wishlist);
+    const doc = await wishlistService.update(req.params.id, req.body);
+    res.json(doc);
   } catch (error) {
     next(error);
   }
 };
 
-export const remove = async (req: Request, res: Response, next: NextFunction) => {
+export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await wishlistService.remove(req.params.id);
     res.status(204).end();
   } catch (error) {
     next(error);
   }
+};
+
+export default {
+    findAll,
+    findById,
+    create,
+    deleteById,
+    updateById
 };

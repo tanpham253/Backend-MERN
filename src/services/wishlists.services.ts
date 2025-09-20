@@ -1,5 +1,5 @@
 // wishlist.service.ts
-import Wishlist from '../models/wishlist.model';
+import Wishlist from '../models/wishlists.model';
 
 export const findAll = async () => {
   return await Wishlist.find();

@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', discountController.findAll);
 router.get('/:id', discountController.findById);
 router.post('/', discountController.create);
-router.put('/:id', discountController.update);
-router.delete('/:id', discountController.remove);
+router.put('/:id', discountController.updateById);
+router.delete('/:id', discountController.deleteById);
 
 export default router;

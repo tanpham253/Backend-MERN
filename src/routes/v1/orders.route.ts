@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', ordersController.findAll);
 router.get('/:id', ordersController.findById);
 router.post('/', ordersController.create);
-router.put('/:id', ordersController.update);
-router.delete('/:id', ordersController.remove);
+router.put('/:id', ordersController.updateById);
+router.delete('/:id', ordersController.deleteById);
 
 export default router;
