@@ -1,9 +1,44 @@
 import createError from "http-errors";
 import Product, { IProduct } from "../models/products.model";
+import mongoose from "mongoose";
 
-const findAll = async () => {
-  const productDB = await Product.find();
-  return productDB;
+const findAll = async (query: any) => {
+  // pagination
+  console.log("query", query);
+  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by = 'createdAt', cat_id = null } = query; // default 1, default cat_id = null
+
+  console.log("keyword", keyword);
+  console.log("cat_id", cat_id);
+
+  let sortObject = {};
+  sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1};
+
+  const where: any = {};
+  // add filter to where
+
+  if(keyword){  // keyword not null
+    where.product_name = {$regex: keyword, $options: 'i'};
+  }
+
+  if(cat_id) {
+    where.category_id = new mongoose.mongo.ObjectId(cat_id); // object casting
+  }
+
+  const skip = (page - 1) * limit;
+  const productDB = await Product.find(
+    {
+      ...where,
+    }
+  )
+    .skip(skip)
+    .limit(limit)
+    .sort({ ...sortObject })
+  return {
+    productDB,
+    page, // current page number
+    limit,
+    totalRecords: await Product.countDocuments(),
+  };
 };
 
 const findById = async (id: string) => {

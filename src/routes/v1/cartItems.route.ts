@@ -4,10 +4,10 @@ import * as cartItemsController from '../../controllers/cartItem.controller';
 
 const router = Router();
 
-router.get('/', cartItemsController.findAll);
-router.get('/:id', cartItemsController.findById);
-router.post('/', cartItemsController.create);
-router.put('/:id', cartItemsController.updateById);
-router.delete('/:id', cartItemsController.deleteById);
+router.get('/cartItems', cartItemsController.findAll);
+router.get('/cartItems/:id', cartItemsController.findById);
+router.post('/cartItems', cartItemsController.create);
+router.put('/cartItems/:id', cartItemsController.updateById);
+router.delete('/cartItems/:id', cartItemsController.deleteById);
 
 export default router;

@@ -5,7 +5,7 @@ import sendJsonSuccess from "../helper/response.helper";
 // Hàm lấy tất cả sản phẩm
 const findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const products = await productsService.findAll();
+        const products = await productsService.findAll(req.query);
         sendJsonSuccess(res, products);
     } catch (error) {
         next(error);

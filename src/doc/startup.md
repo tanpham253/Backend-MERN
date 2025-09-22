@@ -21,7 +21,7 @@ get http://localhost:8080/api/v1/articles/id
 ```
 in src/rest-client/categories.http
 
-# Internal issue 404 handle at app.ts
+# Internal issue 404 handle at app.ts, for later deal with this in services or common responses in helper, keywords: validation
 
 ```
 pnpm init
@@ -89,6 +89,8 @@ Error handling
 pnpm i http-errors
 pnpm i @types/http-errors --save-dev
 ```
+Beware of trailing comma in http requests
+
 In app.ts
 
 Define internal error in app.ts
@@ -135,10 +137,59 @@ Create seeding
 
 Problem in fakerjs: lorem min words fixed
 
-Queries
+## Queries
 https://mongoosejs.com/docs/queries.html
 find=select
 
 ## pagination
 start from controller
 example in service product: find all function
+
+example in products findAll services
+also query mongo
+mongo is default non case sensitive
+also example of query
+beware of data type
+virtual fullname in customer model
+
+hash password by bcrypt in middleware
+```
+pnpm i bcrypt
+```
+```
+pnpm i --save-dev @types/bcrypt
+```
+
+AI generate code for export middleware for bcrypt to specific property name 'password' in folder configs
+
+error handle from controller now move to middlewares
+
+authentication on this middleware
+
+### Middleware in this scope
+Compression, Morgan, Cors, Helmet
+https://expressjs.com/en/resources/middleware.html
+
+Validate request: yup
+```
+pnpm i yup
+```
+
+validation schema in validation folder
+
+role in users
+
+validation export to routes
+
+validation also contains regex
+
+res.status using Express api, some status code can come with different kind of return response
+201 created
+400 invalid
+409 conflic -> duplicate
+200 ok -> return resource in body
+404 don't exist
+204 update, no content return
+
+## search tool
+example in findall users

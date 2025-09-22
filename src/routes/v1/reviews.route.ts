@@ -4,10 +4,10 @@ import * as reviewController from '../../controllers/reviews.controller';
 
 const router = Router();
 
-router.get('/', reviewController.findAll);
-router.get('/:id', reviewController.findById);
-router.post('/', reviewController.create);
-router.put('/:id', reviewController.updateById);
-router.delete('/:id', reviewController.deleteById);
+router.get('/review', reviewController.findAll);
+router.get('/review/:id', reviewController.findById);
+router.post('/review', reviewController.create);
+router.put('/review/:id', reviewController.updateById);
+router.delete('/review/:id', reviewController.deleteById);
 
 export default router;

@@ -1,32 +1,69 @@
 // users.model.ts
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document } from "mongoose";
+import { applyPasswordHashing } from "../configs/hashPassword";
 
 export interface IUsers extends Document {
-  user_id?: number;
-  role_id: number;
-  username: string;
+  roles: string[];
+  first_name: string;
+  last_name: string;
   password: string;
   email: string;
-  full_name?: string;
   is_active?: boolean;
-  created_at?: Date;
-  last_login?: Date;
 }
 
-const usersSchema = new Schema<IUsers>(
+const usersSchema = new Schema(
   {
-    user_id: { type: Number },
-    role_id: { type: Number },
-    username: { type: String },
-    password: { type: String },
-    email: { type: String },
-    full_name: { type: String, required: false },
+    // 1 user can have more than 1 role
+    roles: {
+      type: [String],
+      default: ["staff"],
+      enum: ["staff", "admin", "superadmin"],
+    },
+
+    password: {
+      type: String,
+      minLength: 6,
+      maxLength: 255,
+      require: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      maxlength: 160,
+      lowercase: true,
+    },
+    first_name: { type: String, required: false },
+    last_name: { type: String, required: false },
     is_active: { type: Boolean, required: false },
-    created_at: { type: Date, required: false },
-    last_login: { type: Date, required: false },
   },
-  { timestamps: false }
+  {
+    timestamps: false,
+    virtuals: {
+      fullName:{
+        get() {
+          return `${this.first_name} ${this.last_name}`;
+        }
+      }
+    },
+    toJSON: {
+      virtuals: true,
+      transform: (doc,ret) => {
+        delete (ret as { password?: string }).password; // do not return password
+        return ret;
+      }
+    },
+    toObject: {
+      virtuals: true,
+      transform: (doc,ret) => {
+        delete (ret as { password?: string }).password; // do not return password
+        return ret;
+      }
+    }
+  }
 );
 
-const Users = model<IUsers>('Users', usersSchema);
+applyPasswordHashing(usersSchema);
+
+const Users = model<IUsers>("Users", usersSchema);
 export default Users;

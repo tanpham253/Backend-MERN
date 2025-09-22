@@ -4,10 +4,10 @@ import addressController from '../../controllers/address.controller';
 
 const router = Router();
 
-router.get('/', addressController.findAll);
-router.get('/:id', addressController.findById);
-router.post('/', addressController.create);
-router.put('/:id', addressController.updateById);
-router.delete('/:id', addressController.deleteById);
+router.get('/address', addressController.findAll);
+router.get('/address/:id', addressController.findById);
+router.post('/address', addressController.create);
+router.put('/address/:id', addressController.updateById);
+router.delete('/address/:id', addressController.deleteById);
 
 export default router;

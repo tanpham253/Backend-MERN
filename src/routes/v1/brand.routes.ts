@@ -4,10 +4,10 @@ import * as brandController from '../../controllers/brand.controller';
 
 const router = Router();
 
-router.get('/', brandController.findAll);
-router.get('/:id', brandController.findById);
-router.post('/', brandController.create);
-router.put('/:id', brandController.updateById);
-router.delete('/:id', brandController.deleteById);
+router.get('/brand', brandController.findAll);
+router.get('/brand/:id', brandController.findById);
+router.post('/brand', brandController.create);
+router.put('/brand/:id', brandController.updateById);
+router.delete('/brand/:id', brandController.deleteById);
 
 export default router;

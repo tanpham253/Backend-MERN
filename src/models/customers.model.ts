@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { version } from "os";
+import { applyPasswordHashing } from "../configs/hashPassword";
 
 export interface ICustomer extends Document {
   first_name: string;
@@ -53,10 +53,32 @@ const customerSchema = new Schema(
   {
     timestamps: true, // createdAt, updatedAt
     versionKey: false, // __v
-    // collection: "customers", // custom collection name or else default name at the line below
+
+    virtuals: {
+      fullName:{
+        get() {
+          return `${this.first_name} ${this.last_name}`;
+        }
+      }
+    },
+    toJSON: {
+      virtuals: true,
+      transform: (doc,ret) => {
+        delete (ret as { password?: string }).password; // do not return password
+        return ret;
+      }
+    },
+    toObject: {
+      virtuals: true,
+      transform: (doc,ret) => {
+        delete (ret as { password?: string }).password; // do not return password
+        return ret;
+      }
+    }
   }
 );
 
+applyPasswordHashing(customerSchema);
 
 const customer = model("Customer", customerSchema);
 export default customer;

@@ -4,10 +4,10 @@ import * as notificationsController from '../../controllers/notifications.contro
 
 const router = Router();
 
-router.get('/', notificationsController.findAll);
-router.get('/:id', notificationsController.findById);
-router.post('/', notificationsController.create);
-router.put('/:id', notificationsController.updateById);
-router.delete('/:id', notificationsController.deleteById);
+router.get('/notifications', notificationsController.findAll);
+router.get('/notifications/:id', notificationsController.findById);
+router.post('/notifications', notificationsController.create);
+router.put('/notifications/:id', notificationsController.updateById);
+router.delete('/notifications/:id', notificationsController.deleteById);
 
 export default router;

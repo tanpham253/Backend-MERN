@@ -3,10 +3,6 @@ import express, { NextFunction, Express, Request, Response } from 'express';
 //Khởi tạo một ứng dụng Express
 const app: Express = express();
 
-// able to parse json
-app.use(express.json()); // to parse json body
-app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
-
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
 // products
@@ -47,6 +43,14 @@ import usersRouter from "./routes/v1/users.routes";
 import rolesRouter from "./routes/v1/roles.routes";
 // audit_log
 import auditLogRouter from "./routes/v1/audit_log.routes";
+
+// able to parse json, built in middleware
+app.use(express.json()); // to parse json body
+app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
+
+// middleware app level example
+import { appExample } from './middleware/appExample.midleware';
+app.use(appExample);
 
 // Register all routers with prefix
 app.use("/api/v1", categoriesRouter);
