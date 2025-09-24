@@ -3,6 +3,34 @@ import express, { NextFunction, Express, Request, Response } from 'express';
 //Khởi tạo một ứng dụng Express
 const app: Express = express();
 
+// able to parse json, built in middleware
+app.use(express.json()); // to parse json body
+app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
+
+// express rate limit
+import { rateLimit } from 'express-rate-limit';
+app.use(rateLimit({
+  windowMs: 15 * 60 *1000, // 15 min
+  max: 100, // limit each IP 100 request each above time
+  message: {
+    statusCode: 429,
+    message: 'Too many requests, please try again later.',
+    data: null
+  }
+}));
+
+// utilities
+import compression from 'compression';
+import helmet from 'helmet';
+import { authApiKey } from './middleware/authApiKey.middleware';
+app.use(helmet());
+app.use(compression());
+app.use(authApiKey);
+
+// user authorization
+import authRouter from './routes/v1/auth.route';
+app.use('/api/v1/auth', authRouter);
+
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
 // products
@@ -22,31 +50,27 @@ import wishlistRouter from "./routes/v1/wishlists.route";
 // review
 import reviewRouter from "./routes/v1/reviews.route";
 // discount
-import discountRouter from "./routes/v1/discounts.routes";
+import discountRouter from "./routes/v1/discounts.route";
 // shipment
-import shipmentRouter from "./routes/v1/shipment.routes";
+import shipmentRouter from "./routes/v1/shipment.route";
 // payment
 import paymentRouter from "./routes/v1/payment.routes";
 // address
-import addressRouter from "./routes/v1/address.routes";
+import addressRouter from "./routes/v1/address.route";
 // inventory
-import inventoryRouter from "./routes/v1/inventory.routes";
+import inventoryRouter from "./routes/v1/inventory.route";
 // supplier
-import supplierRouter from "./routes/v1/supplier.routes";
+import supplierRouter from "./routes/v1/supplier.route";
 // brand
 import brandRouter from "./routes/v1/brand.routes";
 // notifications
-import notificationsRouter from "./routes/v1/notifications.routes";
+import notificationsRouter from "./routes/v1/notifications.route";
 // users
-import usersRouter from "./routes/v1/users.routes";
+import usersRouter from "./routes/v1/users.route";
 // roles
 import rolesRouter from "./routes/v1/roles.routes";
 // audit_log
-import auditLogRouter from "./routes/v1/audit_log.routes";
-
-// able to parse json, built in middleware
-app.use(express.json()); // to parse json body
-app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
+import auditLogRouter from "./routes/v1/audit_log.route";
 
 // middleware app level example
 import { appExample } from './middleware/appExample.midleware';
@@ -74,6 +98,9 @@ app.use("/api/v1", usersRouter);
 app.use("/api/v1", rolesRouter);
 app.use("/api/v1", auditLogRouter);
 
+// test
+import testRouter from "./routes/v1/test.route";
+app.use("/api/v1", testRouter);
 
 /*
 // fake object

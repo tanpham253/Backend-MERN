@@ -1,13 +1,16 @@
-import dotenv from "dotenv";
+import { env } from "./helper/env.helper";
 import app from "./app";
 import mongoose from "mongoose";
 
-dotenv.config({path: '.env'});
-const PORT = process.env.PORT || 8080;
+const PORT = env.PORT;
+
+if (!env.MONGODB_URI) {
+  throw new Error("MONGODB_URI is not defined in environment variables.");
+}
 
 // MongoDB connect
 mongoose
-  .connect(process.env.MONGO_URL as string)
+  .connect(env.MONGODB_URI)
   .then(() => {
     // run express
     app.listen(PORT, () => {

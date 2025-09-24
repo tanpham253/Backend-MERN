@@ -20,3 +20,6 @@ DELETE http://localhost:8080/api/v1/categories/3
 get http://localhost:8080/api/v1/shipments
 ###
 get http://localhost:8080/api/v1/products?page=1
+###
+get http://localhost:8080/api/v1/categories
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA

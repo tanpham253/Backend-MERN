@@ -121,7 +121,7 @@ Models of database in models folder
 
 create route for model in app
 
-Non controller db at test route
+Non controller db at test route (in other repository)
 
 ##### Remember Promise - Async/Await in db connections
 
@@ -192,4 +192,45 @@ res.status using Express api, some status code can come with different kind of r
 204 update, no content return
 
 ## search tool
-example in findall users
+example in findAll users
+
+## Json web token
+```
+pnpm i jsonwebtoken
+```
+```
+pnpm i --save-dev @types/jsonwebtoken
+```
+create token to hide env and responses
+
+function generateToken have to address correct propery
+
+create authenticate controller and service for users
+verify email and password
+
+use access token to access pages and api
+
+create middlewares authentication for header carry token
+
+refresh token in auth.http
+
+need to go through auth.route at first then every private route is intervened with authorization function
+
+## Compression to reduce response packages size
+```
+pnpm install compression
+```
+```
+pnpm install --save-dev @types/compression
+```
+## Helmet to hide header
+```
+pnpm install helmet
+```
+
+## X-API-KEY prevent spam API, only app with provided key
+
+## express-rate-limit
+```
+pnpm i express-rate-limit
+```
