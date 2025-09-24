@@ -2,11 +2,13 @@
 import Cart from '../models/carts.model';
 
 export const findAll = async () => {
-  return await Cart.find();
+  return await Cart.find()
+    .populate('customer_id', 'first_name last_name email');
 };
 
 export const findById = async (id: string) => {
-  return await Cart.findById(id);
+  return await Cart.findById(id)
+    .populate('customer_id', 'first_name last_name email phone_number');
 };
 
 export const create = async (data: any) => {

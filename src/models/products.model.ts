@@ -1,8 +1,9 @@
 import { Schema, model } from "mongoose";
-import { version } from "os";
 
 export interface IProduct extends Document {
   product_name: string;
+  category_id: Schema.Types.ObjectId;
+  brand_id: Schema.Types.ObjectId;
   description?: string;
   slug: string;
   sku: string;
@@ -24,6 +25,16 @@ const productSchema = new Schema(
       trim: true,
       minlength: 3,
       maxlength: 255,
+    },
+    category_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
+    brand_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Brand',
+      required: true,
     },
     description: { 
       type: String, 

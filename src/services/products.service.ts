@@ -5,10 +5,11 @@ import mongoose from "mongoose";
 const findAll = async (query: any) => {
   // pagination
   console.log("query", query);
-  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by = 'createdAt', cat_id = null } = query; // default 1, default cat_id = null
+  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by = 'createdAt', cat_id = null, brand_id = null } = query;
 
   console.log("keyword", keyword);
   console.log("cat_id", cat_id);
+  console.log("brand_id", brand_id);
 
   let sortObject = {};
   sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1};
@@ -24,15 +25,18 @@ const findAll = async (query: any) => {
     where.category_id = new mongoose.mongo.ObjectId(cat_id); // object casting
   }
 
+  if(brand_id) {
+    where.brand_id = new mongoose.mongo.ObjectId(brand_id);
+  }
+
   const skip = (page - 1) * limit;
-  const productDB = await Product.find(
-    {
-      ...where,
-    }
-  )
+  const productDB = await Product.find({ ...where })
+    .populate('category_id', 'name slug')
+    .populate('brand_id', 'name slug')
     .skip(skip)
     .limit(limit)
-    .sort({ ...sortObject })
+    .sort({ ...sortObject });
+    
   return {
     productDB,
     page, // current page number
@@ -42,7 +46,9 @@ const findAll = async (query: any) => {
 };
 
 const findById = async (id: string) => {
-  const product = await Product.findById(id);
+  const product = await Product.findById(id)
+    .populate('category_id', 'name slug description')
+    .populate('brand_id', 'name slug description');
   if (!product) {
     throw createError(404, "Product not found");
   }

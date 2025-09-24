@@ -31,7 +31,7 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 
 export const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const doc = await inventoryService.update(req.params.id, req.body);
+    const doc = await inventoryService.remove(req.params.id);
     res.json(doc);
   } catch (error) {
     next(error);
@@ -40,8 +40,7 @@ export const deleteById = async (req: Request, res: Response, next: NextFunction
 
 export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await inventoryService.remove(req.params.id);
-    res.status(204).end();
+    const doc = await inventoryService.update(req.params.id, req.body);
   } catch (error) {
     next(error);
   }

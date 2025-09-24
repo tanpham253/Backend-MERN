@@ -2,11 +2,15 @@
 import Review from '../models/reviews.model';
 
 export const findAll = async () => {
-  return await Review.find();
+  return await Review.find()
+    .populate('product_id', 'product_name sku')
+    .populate('customer_id', 'first_name last_name');
 };
 
 export const findById = async (id: string) => {
-  return await Review.findById(id);
+  return await Review.findById(id)
+    .populate('product_id', 'product_name sku description')
+    .populate('customer_id', 'first_name last_name email');
 };
 
 export const create = async (data: any) => {

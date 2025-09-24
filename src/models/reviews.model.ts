@@ -2,8 +2,8 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface IReview extends Document {
-  product_id: number;
-  customer_id: number;
+  product_id: Schema.Types.ObjectId;
+  customer_id: Schema.Types.ObjectId;
   rating: number;
   comment?: string;
   created_at?: Date;
@@ -11,8 +11,16 @@ export interface IReview extends Document {
 
 const reviewSchema = new Schema<IReview>(
   {
-    product_id: { type: Number, required: true },
-    customer_id: { type: Number, required: true },
+    product_id: { 
+      type: Schema.Types.ObjectId, 
+      ref: 'Product',
+      required: true 
+    },
+    customer_id: { 
+      type: Schema.Types.ObjectId, 
+      ref: 'Customer',
+      required: true 
+    },
     rating: { type: Number, required: true, min: 1, max: 5 },
     comment: { type: String, required: false, maxlength: 1000 },
     created_at: { type: Date, default: Date.now },
