@@ -1,6 +1,7 @@
 import createError from "http-errors";
-import Category from "../models/categories.model";
+import Category, { ICategory } from "../models/categories.model";
 
+// doc on mogoose offical site
 const findAll = async () => {
   const categoryDB = await Category.find();
   return categoryDB;
@@ -14,10 +15,9 @@ const findById = async (id: string) => {
   return category;
 };
 
-const create = (payload: any) => {
+const create = (payload: ICategory) => {
   const newCategory = new Category({
-    title: payload.title,
-    keyword: payload.keyword,
+    name: payload.name,
     description: payload.description,
     slug: payload.slug,
   });
@@ -25,7 +25,7 @@ const create = (payload: any) => {
   return newCategory;
 };
 
-const updateById = async (id: string, payload: any) => {
+const updateById = async (id: string, payload: ICategory) => {
     // https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()
   const updatedCategory = await Category.findByIdAndUpdate(id, payload, {
     new: true, // return modified instead

@@ -1,0 +1,32 @@
+# require using json in app.ts to parse
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
+
+{
+    "first_name": "admin",
+    "last_name": "developer",
+    "email": "admin24232@gmail.com",
+    "password": "!Qaz123456",
+    "roles": ["admin"],
+    "active": true
+}
+###
+PUT http://localhost:8080/api/v1/users/68d11d98f3695af5e02a0f59
+Content-Type: application/json
+
+{
+    "first_name": "Johnd3sddd2s3d2dd2"
+}
+###
+put http://localhost:8080/api/v1/categories/68ce37c4aa4896602f152368
+Content-Type: application/json
+
+{
+    "name": "New Category"
+}
+###
+DELETE http://localhost:8080/api/v1/categories/3
+###
+get http://localhost:8080/api/v1/users/68d0ca8d1a557fc0bc4a8ab7
+###
+get http://localhost:8080/api/v1/products?page=1

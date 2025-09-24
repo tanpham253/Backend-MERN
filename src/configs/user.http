@@ -1,0 +1,10 @@
+GET http://localhost:8080/api/v1/users/68d11d98f3695af5e02a0f59
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDExZDk4ZjM2OTVhZjVlMDJhMGY1OSIsImVtYWlsIjoiam9odzMyNDIzMkBnbWFpbC5jb20iLCJyb2xlcyI6WyJzdGFmZiJdLCJpYXQiOjE3NTg2MzY1NjIsImV4cCI6MTc1OTI0MTM2Mn0.196zDqQgi9rAKkFy6pIRoFc5QOojFea__SRfwcBX3Ak
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+# {
+#     "first_name": "dev"
+# }
+###
+get http://localhost:8080/api/v1/users/68d0ca8d1a557fc0bc4a8ab7
