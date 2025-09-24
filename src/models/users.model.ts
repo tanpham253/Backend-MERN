@@ -1,6 +1,7 @@
 // users.model.ts
 import { Schema, model, Document } from "mongoose";
 import { applyPasswordHashing } from "../configs/hashPassword";
+import { number } from "yup";
 
 export interface IUsers extends Document {
   roles: string[];

@@ -31,7 +31,7 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 
 export const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const doc = await reviewService.update(req.params.id, req.body);
+    const doc = await reviewService.remove(req.params.id);
     res.json(doc);
   } catch (error) {
     next(error);
@@ -40,8 +40,8 @@ export const deleteById = async (req: Request, res: Response, next: NextFunction
 
 export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await reviewService.remove(req.params.id);
-    res.status(204).end();
+    const doc = await reviewService.update(req.params.id, req.body);
+    res.json(doc);
   } catch (error) {
     next(error);
   }

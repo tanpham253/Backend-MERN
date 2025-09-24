@@ -7,9 +7,8 @@ export interface ICustomer extends Document {
   email: string;
   password: string;
   phone_number: string;
+  address_id?: Schema.Types.ObjectId;
   is_active?: boolean;
-  created_at: Date;
-  updated_at: Date;
 }
 
 const customerSchema = new Schema(
@@ -44,6 +43,11 @@ const customerSchema = new Schema(
       type: String,
       required: false,
       trim: true,
+    },
+    address_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Address',
+      required: false,
     },
     is_active: {
       type: Boolean,

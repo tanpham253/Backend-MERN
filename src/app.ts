@@ -27,10 +27,6 @@ app.use(helmet());
 app.use(compression());
 app.use(authApiKey);
 
-// user authorization
-import authRouter from './routes/v1/auth.route';
-app.use('/api/v1/auth', authRouter);
-
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
 // products
@@ -62,7 +58,7 @@ import inventoryRouter from "./routes/v1/inventory.route";
 // supplier
 import supplierRouter from "./routes/v1/supplier.route";
 // brand
-import brandRouter from "./routes/v1/brand.routes";
+import brandRouter from "./routes/v1/brands.routes";
 // notifications
 import notificationsRouter from "./routes/v1/notifications.route";
 // users
@@ -77,14 +73,10 @@ import { appExample } from './middleware/appExample.midleware';
 app.use(appExample);
 
 // Register all routers with prefix
-app.use("/api/v1", categoriesRouter);
-app.use("/api/v1", productsRouter);
-app.use("/api/v1", customersRouter);
 app.use("/api/v1", ordersRouter);
 app.use("/api/v1", orderItemsRouter);
 app.use("/api/v1", cartRouter);
 app.use("/api/v1", cartItemsRouter);
-app.use("/api/v1", wishlistRouter);
 app.use("/api/v1", reviewRouter);
 app.use("/api/v1", discountRouter);
 app.use("/api/v1", shipmentRouter);
@@ -94,9 +86,18 @@ app.use("/api/v1", inventoryRouter);
 app.use("/api/v1", supplierRouter);
 app.use("/api/v1", brandRouter);
 app.use("/api/v1", notificationsRouter);
-app.use("/api/v1", usersRouter);
 app.use("/api/v1", rolesRouter);
 app.use("/api/v1", auditLogRouter);
+
+// user authorization
+import authRouter from './routes/v1/auth.route';
+app.use('/api/v1/auth', authRouter);
+app.use("/api/v1", categoriesRouter);
+app.use("/api/v1", productsRouter);
+
+app.use("/api/v1", usersRouter);
+app.use("/api/v1", customersRouter);
+app.use("/api/v1", wishlistRouter);
 
 // test
 import testRouter from "./routes/v1/test.route";

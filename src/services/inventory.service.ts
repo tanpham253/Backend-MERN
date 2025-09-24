@@ -2,11 +2,13 @@
 import Inventory from '../models/inventory.model';
 
 export const findAll = async () => {
-  return await Inventory.find();
+  return await Inventory.find()
+    .populate('product_id', 'product_name sku stock');
 };
 
 export const findById = async (id: string) => {
-  return await Inventory.findById(id);
+  return await Inventory.findById(id)
+    .populate('product_id', 'product_name sku stock description');
 };
 
 export const create = async (data: any) => {

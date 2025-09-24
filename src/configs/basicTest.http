@@ -1,0 +1,41 @@
+### users routes test
+# {
+#   "_id": {
+#     "$oid": "68d2a822df1a89ef5c5cbec4"
+#   },
+#   "roles": [
+#     "superadmin"
+#   ],
+#   "password": "$2b$10$OPgwlZtavdy/tgwBh9ntauqu7vT2BR7q9Ec516mLX862sL/UisnOC",
+#   "email": "admin159753@gmail.com",
+#   "first_name": "admin",
+#   "last_name": "super",
+#   "__v": 0
+# }
+### 200
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+    "email": "admin159753@gmail.com",
+    "password": "!Qaz123456"
+}
+### 200
+POST http://localhost:8080/api/v1/auth/refresh-token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDJhODIyZGYxYTg5ZWY1YzVjYmVjNCIsImVtYWlsIjoiYWRtaW4xNTk3NTNAZ21haWwuY29tIiwicm9sZXMiOlsic3VwZXJhZG1pbiJdLCJpYXQiOjE3NTg3MTMxNDQsImV4cCI6MTc1OTMxNzk0NH0.JLp7Dhc2tT_eSm4TMOgx9z8AaR6VGpaTVtsQK-2NRqI
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+### 401
+get http://localhost:8080/api/v1/users
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+### 200 / 401
+get http://localhost:8080/api/v1/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDJhODIyZGYxYTg5ZWY1YzVjYmVjNCIsImVtYWlsIjoiYWRtaW4xNTk3NTNAZ21haWwuY29tIiwicm9sZXMiOlsic3VwZXJhZG1pbiJdLCJpYXQiOjE3NTg3MTMxNDQsImV4cCI6MTc1OTMxNzk0NH0.JLp7Dhc2tT_eSm4TMOgx9z8AaR6VGpaTVtsQK-2NRqI
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+### 200
+get http://localhost:8080/api/v1/products
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+### products routes test
+
+### customers routes test

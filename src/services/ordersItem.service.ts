@@ -2,11 +2,15 @@
 import OrderItem from '../models/orderItems.model';
 
 export const findAll = async () => {
-  return await OrderItem.find();
+  return await OrderItem.find()
+    .populate('order_id', 'status total_amount order_date')
+    .populate('product_id', 'product_name price sku');
 };
 
 export const findById = async (id: string) => {
-  return await OrderItem.findById(id);
+  return await OrderItem.findById(id)
+    .populate('order_id', 'status total_amount order_date')
+    .populate('product_id', 'product_name price sku description');
 };
 
 export const create = async (data: any) => {

@@ -1,0 +1,44 @@
+###
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+    "email": "admin24232@gmail.com",
+    "password": "!Qaz123456"
+}
+### Get all brands
+GET http://localhost:8080/api/v1/brands
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+###
+
+### Get all categories
+GET http://localhost:8080/api/v1/categories
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+###
+
+### Get all products
+GET http://localhost:8080/api/v1/products
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+###
+
+### Create a product manually
+POST http://localhost:8080/api/v1/products
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "product_name": "Test Product",
+  "category_id": "68d39fa57ca8664f02e98ef9",
+  "brand_id": "68d39fa57ca8664f02e98ef3",
+  "slug": "test-product",
+  "sku": "TP001",
+  "price": 99.99,
+  "stock": 10
+}

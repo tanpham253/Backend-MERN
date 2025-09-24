@@ -4,12 +4,14 @@ import Customer from "../models/customers.model";
 const saltRounds = 10;
 
 const findAll = async () => {
-  const customerDB = await Customer.find();
+  const customerDB = await Customer.find()
+    .populate('address_id', 'city district ward street');
   return customerDB;
 };
 
 const findById = async (id: string) => {
-  const customer = await Customer.findById(id);
+  const customer = await Customer.findById(id)
+    .populate('address_id', 'city district ward street');
   if (!customer) {
     throw createError(404, "Customer not found");
   }
