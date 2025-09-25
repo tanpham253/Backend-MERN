@@ -1,13 +1,14 @@
 # require using json in app.ts to parse
 POST http://localhost:8080/api/v1/users
 Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 
 {
     "first_name": "admin",
-    "last_name": "developer",
-    "email": "admin24232@gmail.com",
+    "last_name": "super",
+    "email": "admin@gmail.com",
     "password": "!Qaz123456",
-    "roles": ["admin"],
+    "roles": ["superadmin"],
     "active": true
 }
 ###
