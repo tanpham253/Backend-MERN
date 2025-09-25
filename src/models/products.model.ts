@@ -2,8 +2,8 @@ import { Schema, model } from "mongoose";
 
 export interface IProduct extends Document {
   product_name: string;
-  category_id: Schema.Types.ObjectId;
-  brand_id: Schema.Types.ObjectId;
+  category_id: { type: Schema.Types.ObjectId, ref: "categories", required: true },
+  brand_id: { type: Schema.Types.ObjectId, ref: "brands", required: true },
   description?: string;
   slug: string;
   sku: string;

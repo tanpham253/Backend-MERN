@@ -9,8 +9,6 @@ export interface ICustomer extends Document {
   phone_number: string;
   address_id?: Schema.Types.ObjectId;
   is_active?: boolean;
-  created_at: Date;
-  updated_at: Date;
 }
 
 const customerSchema = new Schema(

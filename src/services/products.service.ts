@@ -57,6 +57,8 @@ const findById = async (id: string) => {
 
 const create = (payload: any) => {
   const newProduct = new Product({
+    category_id: payload.category_id,
+    brand_id: payload.brand_id,
     product_name: payload.product_name,
     description: payload.description,
     slug: payload.slug,

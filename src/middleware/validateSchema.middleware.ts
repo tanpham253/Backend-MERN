@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 
 export const validateSchemaYup = (schema: AnySchema) => async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    // console.log("📌 Incoming body:", JSON.stringify(req.body, null, 2));
+    // console.log("Schema validating keys:", Object.keys(req.body));
     await schema.validate({
       body: req.body,
       query: req.query,
@@ -16,20 +18,7 @@ export const validateSchemaYup = (schema: AnySchema) => async (req: Request, res
   next();
 
   } catch (err) {
-    //console.log(err);
-    if (err instanceof ValidationError) {
-      //console.error(err);
-      res.status(400).json({
-        statusCode: 400,
-        message: err.errors, // err.errors chứa tất cả các thông điệp lỗi
-        typeError: 'validateSchema'
-      });
+      // 🚀 Pass the error forward — no response here
+      return next(err);
     }
-
-    res.status(500).json({
-      statusCode: 500,
-      message: 'validate Yup Error',
-      typeError: 'validateSchemaUnknown'
-    });
-  }
-};
+  };

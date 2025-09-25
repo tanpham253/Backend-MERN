@@ -20,8 +20,8 @@ const create = yup
       last_name: yup.string().min(2).max(50).required(),
       email: yup.string().matches(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Invalid Email').max(160).required(),
       active: yup.boolean().optional().default(true),
-      password: yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, 'atleast  1 and only of each lowercase letter, uppercase letter, digit, special character and 6 characters').max(255, "max 2555 character").required(),
-      roles: yup.array().of(yup.string().oneOf(['staff','admin','superadmin'])).default(['staff']),
+      phone_number: yup.boolean().optional().default(true),
+      password: yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, 'Atleast  1 and only of each lowercase letter, uppercase letter, digit, special character and 6 characters').max(255, "max 2555 character").required(),
     }),
   })
   .required();
@@ -40,12 +40,12 @@ const updateById = yup
         id: yup.string().matches(/^[0-9a-fA-F]{24}$/, {message: 'ID is non-Objectid'}).required(),
     }),
     body: yup.object({
-        first_name: yup.string().min(2, {message: 'firstName atleast 2 characters'}).max(50).optional(),
+        first_name: yup.string().min(2, "FirstName tối thiểu phải 2 kí tự").max(50).optional(),
         last_name: yup.string().min(2).max(50).optional(),
-        email: yup.string().matches(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Email không hợp lệ').max(160).optional(),
+        email: yup.string().matches(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Invalid email').max(160).optional(),
         active: yup.boolean().optional(),
-        password: yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, {message: 'Invalid password'}).max(255, "Password Tối đã 2555 ký tự").optional(),
-        roles: yup.array().of(yup.string().oneOf(['staff', 'admin', 'superadmin'])).optional(),
+        phone_number: yup.boolean().optional().default(true),
+        password: yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, 'Mật khẩu không hợp lệ').max(255, "Password Tối đã 2555 ký tự").optional(),
     })
   })
   .required();

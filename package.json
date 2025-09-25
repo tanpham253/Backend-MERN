@@ -8,7 +8,8 @@
     "build": "npx tsc -p",
     "start": "node server.ts",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "seed": "ts-node-dev --respawn --transpile-only src/configs/seed.ts"
+    "seed": "ts-node-dev --respawn --transpile-only src/configs/seed.ts",
+    "seedstatic": "ts-node-dev --respawn --transpile-only src/configs/staticSeeding.ts"
   },
   "keywords": [],
   "author": "",
