@@ -11,6 +11,11 @@ export const findById = async (id: string) => {
     .populate('customer_id', 'first_name last_name email phone_number');
 };
 
+export const findByCustomerId = async (customer_id: string) => {
+  return await Cart.find({ customer_id })
+    .populate('customer_id', 'first_name last_name email phone_number');
+};
+
 export const create = async (data: any) => {
   const cart = new Cart(data);
   return await cart.save();

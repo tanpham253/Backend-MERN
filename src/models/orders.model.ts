@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface IOrder extends Document {
   customer_id: Schema.Types.ObjectId;
+  order_items?: Schema.Types.ObjectId[];
   shipment_id?: Schema.Types.ObjectId;
   discount_id?: Schema.Types.ObjectId;
   payment_id?: Schema.Types.ObjectId;
@@ -19,6 +20,10 @@ const orderSchema = new Schema<IOrder>(
       ref: 'Customer',
       required: true 
     },
+    order_items: [{ 
+      type: Schema.Types.ObjectId, 
+      ref: 'OrderItem'
+    }],
     shipment_id: { 
       type: Schema.Types.ObjectId, 
       ref: 'Shipment',

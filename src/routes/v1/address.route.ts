@@ -1,13 +1,17 @@
-// address.routes.ts
 import { Router } from 'express';
 import addressController from '../../controllers/address.controller';
+import { authenticateToken, authRoles } from '../../middleware/auth.middleware';
+import { canAccessAddressById } from '../../middleware/customerAuth.middleware';
 
 const router = Router();
 
-router.get('/address', addressController.findAll);
-router.get('/address/:id', addressController.findById);
-router.post('/address', addressController.create);
-router.put('/address/:id', addressController.updateById);
-router.delete('/address/:id', addressController.deleteById);
+router.use(authenticateToken);
+
+router.get('/addresses', authRoles(["admin", "superadmin"]), addressController.findAll);
+router.get('/addresses/customer/:customer_id', canAccessAddressById(), addressController.findByCustomerId);
+router.get('/addresses/:id', canAccessAddressById(), addressController.findById); 
+router.post('/addresses', canAccessAddressById(), addressController.create);
+router.put('/addresses/:id', canAccessAddressById(), addressController.updateById);
+router.delete('/addresses/:id', canAccessAddressById(), addressController.deleteById);
 
 export default router;

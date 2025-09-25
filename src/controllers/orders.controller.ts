@@ -20,6 +20,15 @@ export const findById = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+export const findByCustomerId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const orders = await ordersService.findByCustomerId(req.params.customer_id);
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = await ordersService.create(req.body);
