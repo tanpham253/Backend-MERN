@@ -86,7 +86,7 @@ const productSchema = new Schema(
     },
   }, // schema options 2nd argument (tham so)
   {
-    timestamps: false, // createdAt, updatedAt
+    timestamps: true, // createdAt, updatedAt
     versionKey: false, // __v
     // collection: "products", // custom collection name or else default name at the line below
   }
