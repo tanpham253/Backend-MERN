@@ -29,6 +29,7 @@ export function loadEnvConfig() {
       console.error('❌ Invalid environment configuration:');
       error.inner.forEach(err => {
         console.error(`- ${err.path}: ${err.message}`);
+        console.log(err.inner);
       });
       process.exit(1);
     }

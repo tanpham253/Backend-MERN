@@ -17,6 +17,8 @@ const create = yup
   .object({
     body: yup.object({
       product_name: yup.string().min(2).max(50).required(),
+      category_id: yup.string().matches(/^[0-9a-fA-F]{24}$/, {message: 'ID is non-Objectid'}).required(),
+      brand_id: yup.string().matches(/^[0-9a-fA-F]{24}$/, {message: 'ID is non-Objectid'}).required(),
       description: yup.string().min(2).max(50).required(),
       slug: yup.string().matches(/^[A-Za-z0-9-_]{2,50}$/, {message: 'Only letters, numbers, dashes, and underscores, 2-50'}).required(),
       sku: yup.string().matches(/^[A-Za-z0-9]{12,50}$/, {message: 'must be alphanumeric, 12-50'}).required(),
@@ -24,6 +26,8 @@ const create = yup
       stock: yup.number().min(0,'must be greater than 0').optional().default(0),
       image_url: yup.string().min(2).max(100).optional().default(null),
       isDeleted: yup.boolean().optional().default(false),
+      createdAt: yup.date().default(() => new Date()).optional(),
+      updatedAt: yup.date().default(() => new Date()).optional(),
     }),
   })
   .required();

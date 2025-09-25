@@ -37,5 +37,28 @@ x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 get http://localhost:8080/api/v1/products
 x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 ### products routes test
+get http://localhost:8080/api/v1/products
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+###
+POST http://localhost:8080/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDJhODIyZGYxYTg5ZWY1YzVjYmVjNCIsImVtYWlsIjoiYWRtaW4xNTk3NTNAZ21haWwuY29tIiwicm9sZXMiOlsic3VwZXJhZG1pbiJdLCJpYXQiOjE3NTg3MTMxNDQsImV4cCI6MTc1OTMxNzk0NH0.JLp7Dhc2tT_eSm4TMOgx9z8AaR6VGpaTVtsQK-2NRqI
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 
+{
+  "product_name": "Adidas Ultraboost7",
+  "category_id": "68d39fa57ca8664f02e98ef9",
+  "brand_id": "68d39fa57ca8664f02e98ef4",
+  "description": "nfjdknskf",
+  "slug": "adidas-ultraboost6",
+  "sku": "ADU001SKALFJSKAFSAL",
+  "price": 150,
+  "stock": 30,
+  "image_url": "https://example.com/adidas-ultraboost.jpg",
+  "variant": [
+    "white",
+    "black"
+  ],
+  "isDeleted": false
+}
 ### customers routes test

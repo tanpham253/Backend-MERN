@@ -94,13 +94,13 @@ import authRouter from './routes/v1/auth.route';
 app.use('/api/v1/auth', authRouter);
 app.use("/api/v1", categoriesRouter);
 app.use("/api/v1", productsRouter);
-
 app.use("/api/v1", usersRouter);
 app.use("/api/v1", customersRouter);
 app.use("/api/v1", wishlistRouter);
 
 // test
 import testRouter from "./routes/v1/test.route";
+import { ValidationError } from 'yup';
 app.use("/api/v1", testRouter);
 
 /*
@@ -134,13 +134,22 @@ app.get("/products/:id", (req: Request, res: Response) => {
 
 //handle other errors
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.log(err.stack);  // show error and in which line
-  res.status(err.status || 500);
-    res.json({
-        statusCode: err.status || 500,
-        message: err.status || 'Internal Server Error',
-        data: null
+  console.error(err.stack);
+
+  if (err instanceof ValidationError) {
+    return res.status(400).json({
+      statusCode: 400,
+      message: err.errors, // all validation messages
+      typeError: "validateSchema",
     });
+  }
+
+  return res.status(err.status || 500).json({
+    statusCode: err.status || 500,
+    message: err.message || "Internal Server Error",
+    typeError: "server",
+    data: null,
+  });
 });
 
 export default app;
