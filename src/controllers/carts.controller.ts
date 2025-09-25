@@ -20,6 +20,15 @@ export const findById = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+export const findByCustomerId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const carts = await cartService.findByCustomerId(req.params.customer_id);
+    res.json(carts);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cart = await cartService.create(req.body);

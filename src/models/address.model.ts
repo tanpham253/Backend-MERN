@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface IAddress extends Document {
   address_id?: number;
+  customer_id: Schema.Types.ObjectId;
   city?: string;
   district?: string;
   ward?: string;
@@ -13,6 +14,11 @@ export interface IAddress extends Document {
 const addressSchema = new Schema<IAddress>(
   {
     address_id: { type: Number },
+    customer_id: { 
+      type: Schema.Types.ObjectId, 
+      ref: 'Customer',
+      required: true 
+    },
     city: { type: String, required: false },
     district: { type: String, required: false },
     ward: { type: String, required: false },

@@ -11,9 +11,19 @@ export const findAll = async () => {
 
 export const findById = async (id: string) => {
   return await Order.findById(id)
+    .populate('order_items')
     .populate('customer_id', 'first_name last_name email phone_number')
     .populate('shipment_id', 'tracking_number carrier shipped_date delivery_date status')
     .populate('discount_id', 'code discount_percent description')
+    .populate('payment_id', 'method provider');
+};
+
+export const findByCustomerId = async (customer_id: string) => {
+  return await Order.find({ customer_id })
+    .populate('order_items')
+    .populate('customer_id', 'first_name last_name email phone_number')
+    .populate('shipment_id', 'tracking_number carrier status')
+    .populate('discount_id', 'code discount_percent')
     .populate('payment_id', 'method provider');
 };
 

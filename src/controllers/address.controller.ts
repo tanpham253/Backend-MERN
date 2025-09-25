@@ -20,6 +20,15 @@ export const findById = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+export const findByCustomerId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const addresses = await addressService.findByCustomerId(req.params.customer_id);
+    res.json(addresses);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const doc = await addressService.create(req.body);
