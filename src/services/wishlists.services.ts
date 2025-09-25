@@ -9,6 +9,10 @@ export const findById = async (id: string) => {
   return await Wishlist.findById(id);
 };
 
+export const findByCustomerId = async (customer_id: string) => {
+  return await Wishlist.find({ customer_id });
+};
+
 export const create = async (data: any) => {
   const wishlist = new Wishlist(data);
   return await wishlist.save();

@@ -17,11 +17,6 @@ export const findByCustomerId = async (customer_id: string) => {
   return docs;
 };
 
-export const findByCustomerId = async (customer_id: string) => {
-  return await Address.find({ customer_id })
-    .populate('customer_id', 'first_name last_name email');
-};
-
 export const create = async (data: any) => {
   const doc = new Address(data);
   return await doc.save();

@@ -1,0 +1,237 @@
+### Create admin user first (if not exists)
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+    "first_name": "admin",
+    "last_name": "super",
+    "email": "admin@gmail.com",
+    "password": "!Qaz123456",
+    "roles": ["superadmin"],
+    "active": true
+}
+
+### Login as Admin (get token)
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+    "email": "admin@gmail.com",
+    "password": "!Qaz123456"
+}
+
+### Create customer (replace with actual admin token)
+POST http://localhost:8080/api/v1/customers
+Content-Type: application/json
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "phone_number": "+1234567890",
+  "password": "!Qaz123456",
+  "is_active": true
+}
+
+### Login as Customer (get token)
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "email": "john.doe@example.com",
+  "password": "!Qaz123456"
+}
+
+# =========================
+# ADDRESS CRUD TESTS
+# =========================
+
+### Customer: Create new address (replace customer_id and token)
+POST http://localhost:8080/api/v1/addresses
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "customer_id": "YOUR_CUSTOMER_ID_HERE",
+  "city": "Ho Chi Minh",
+  "district": "District 1",
+  "ward": "Ward 5",
+  "street": "123 Le Loi"
+}
+
+### Customer: Get own addresses
+GET http://localhost:8080/api/v1/addresses/customer/YOUR_CUSTOMER_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Get address by ID
+GET http://localhost:8080/api/v1/addresses/YOUR_ADDRESS_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Update own address
+PUT http://localhost:8080/api/v1/addresses/YOUR_ADDRESS_ID_HERE
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "city": "Ha Noi",
+  "district": "Ba Dinh"
+}
+
+### Customer: Delete own address
+DELETE http://localhost:8080/api/v1/addresses/YOUR_ADDRESS_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+# =========================
+# CART CRUD TESTS
+# =========================
+
+### Customer: Create new cart
+POST http://localhost:8080/api/v1/carts
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "customer_id": "YOUR_CUSTOMER_ID_HERE"
+}
+
+### Customer: Get own carts
+GET http://localhost:8080/api/v1/carts/customer/YOUR_CUSTOMER_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Get cart by ID
+GET http://localhost:8080/api/v1/carts/YOUR_CART_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Update own cart
+PUT http://localhost:8080/api/v1/carts/YOUR_CART_ID_HERE
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "updated_at": "2024-01-25T10:00:00.000Z"
+}
+
+### Customer: Delete own cart
+DELETE http://localhost:8080/api/v1/carts/YOUR_CART_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+# =========================
+# ORDER CRUD TESTS
+# =========================
+
+### Customer: Create new order
+POST http://localhost:8080/api/v1/orders
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "customer_id": "YOUR_CUSTOMER_ID_HERE",
+  "status": "pending",
+  "total_amount": 299.99
+}
+
+### Customer: Get own orders
+GET http://localhost:8080/api/v1/orders/customer/YOUR_CUSTOMER_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Get order by ID
+GET http://localhost:8080/api/v1/orders/YOUR_ORDER_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Update own order
+PUT http://localhost:8080/api/v1/orders/YOUR_ORDER_ID_HERE
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "status": "confirmed",
+  "total_amount": 349.99
+}
+
+### Customer: Delete own order
+DELETE http://localhost:8080/api/v1/orders/YOUR_ORDER_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+# =========================
+# WISHLIST CRUD TESTS
+# =========================
+
+### Customer: Create new wishlist item (need product_id)
+POST http://localhost:8080/api/v1/wishlists
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "customer_id": "YOUR_CUSTOMER_ID_HERE",
+  "product_id": "YOUR_PRODUCT_ID_HERE"
+}
+
+### Customer: Get own wishlist items
+GET http://localhost:8080/api/v1/wishlists/customer/YOUR_CUSTOMER_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Get wishlist item by ID
+GET http://localhost:8080/api/v1/wishlists/YOUR_WISHLIST_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Customer: Update own wishlist item
+PUT http://localhost:8080/api/v1/wishlists/YOUR_WISHLIST_ID_HERE
+Content-Type: application/json
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "product_id": "YOUR_NEW_PRODUCT_ID_HERE"
+}
+
+### Customer: Delete own wishlist item
+DELETE http://localhost:8080/api/v1/wishlists/YOUR_WISHLIST_ID_HERE
+Authorization: Bearer YOUR_CUSTOMER_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+# =========================
+# ADMIN ACCESS TESTS
+# =========================
+
+### Admin: Get all addresses
+GET http://localhost:8080/api/v1/addresses
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Admin: Get all carts
+GET http://localhost:8080/api/v1/carts
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Admin: Get all orders
+GET http://localhost:8080/api/v1/orders
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+### Admin: Get all wishlists
+GET http://localhost:8080/api/v1/wishlists
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
