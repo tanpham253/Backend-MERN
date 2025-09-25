@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import createError from "http-errors";
 import User from "../models/users.model";
+import Customer from "../models/customers.model";
 import { decodedJWT, verifyToken } from "../helper/token.helper";
 
 

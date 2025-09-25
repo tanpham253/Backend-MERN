@@ -12,10 +12,10 @@ router.use(routeCustomerExample);
 router.use(authenticateToken);
 
 // can use multiple middlewares, can use res to pass variable to next middleware
-router.get("/customers", authRoles(["admin", "superadmin"]), customersController.findAll); 
+router.get("/customers", canAccessAddressById, customersController.findAll); 
 router.get("/customers/:id", canAccessAddressById, customersController.findById); 
-router.post("/customers", authRoles(["admin", "superadmin"]), customersController.create); 
-router.delete("/customers/:id", authRoles(["admin", "superadmin"]), customersController.deleteById); 
+router.post("/customers", customersController.create); 
+router.delete("/customers/:id", canAccessAddressById, customersController.deleteById); 
 router.put("/customers/:id", canAccessAddressById, customersController.updateById);
 
 export default router;

@@ -1,20 +1,49 @@
+### create if dont have 1, enable in app.ts
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+    "first_name": "admin",
+    "last_name": "super",
+    "email": "admin@gmail.com",
+    "password": "!Qaz123456",
+    "roles": ["superadmin"],
+    "active": true
+}
 ### 🔐 Login as Admin (get token)
 POST http://localhost:8080/api/v1/auth/login
 Content-Type: application/json
 x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 
 {
-  "email": "admin159753@gmail.com",
+    "email": "admin@gmail.com",
     "password": "!Qaz123456"
 }
+### create customer, have to be authorized for now
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDRkZWJiMTk5MjM5ZGQ0ZmY0M2M3ZiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZXMiOlsic3VwZXJhZG1pbiJdLCJpYXQiOjE3NTg3ODM4MzIsImV4cCI6MTc1OTM4ODYzMn0.E0JMfu8gz_8ckX84HKKn8XKTbUS7utxRBSV9Y1oai0E
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "phone_number": "+1234567890",
+  "password": "password",
+  "address_id": "507f1f77bcf86cd799439011",
+  "is_active": true,
+  "fullName": "John Doe"
+}
 ### 🔐 Login as Customer (get token)
 POST http://localhost:8080/api/v1/auth/login
 Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 
 {
-  "email": "customer1@example.com",
-  "password": "password123"
+  "email": "john.doe@example.com",
+  "password": "password"
 }
 
 ###

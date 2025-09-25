@@ -19,14 +19,9 @@ app.use(rateLimit({
   }
 }));
 
-// utilities
-import compression from 'compression';
-import helmet from 'helmet';
-import { authApiKey } from './middleware/authApiKey.middleware';
-app.use(helmet());
-app.use(compression());
-app.use(authApiKey);
-
+// users
+import usersRouter from "./routes/v1/users.route";
+// app.use("/api/v1", usersRouter); // disable this after create admin
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
 // products
@@ -61,18 +56,36 @@ import supplierRouter from "./routes/v1/supplier.route";
 import brandRouter from "./routes/v1/brands.routes";
 // notifications
 import notificationsRouter from "./routes/v1/notifications.route";
-// users
-import usersRouter from "./routes/v1/users.route";
 // roles
 import rolesRouter from "./routes/v1/roles.routes";
 // audit_log
 import auditLogRouter from "./routes/v1/audit_log.route";
+// utilities
+import compression from 'compression';
+import helmet from 'helmet';
+import { authApiKey } from './middleware/authApiKey.middleware';
+app.use(helmet());
+
+// user authorization
+import authRouter from './routes/v1/auth.route';
+app.use('/api/v1/auth', authRouter);
+
+app.use(compression());
+
+// public
+app.use("/api/v1", customersRouter);
+app.use("/api/v1", brandRouter);
+app.use("/api/v1", categoriesRouter);
+app.use("/api/v1", productsRouter);
+
+app.use(authApiKey);
 
 // middleware app level example
-import { appExample } from './middleware/appExample.midleware';
-app.use(appExample);
+// import { appExample } from './middleware/appExample.midleware';
+// app.use(appExample);
 
 // Register all routers with prefix
+app.use("/api/v1", usersRouter);
 app.use("/api/v1", ordersRouter);
 app.use("/api/v1", orderItemsRouter);
 app.use("/api/v1", cartRouter);
@@ -84,18 +97,9 @@ app.use("/api/v1", paymentRouter);
 app.use("/api/v1", addressRouter);
 app.use("/api/v1", inventoryRouter);
 app.use("/api/v1", supplierRouter);
-app.use("/api/v1", brandRouter);
 app.use("/api/v1", notificationsRouter);
 app.use("/api/v1", rolesRouter);
 app.use("/api/v1", auditLogRouter);
-
-// user authorization
-import authRouter from './routes/v1/auth.route';
-app.use('/api/v1/auth', authRouter);
-app.use("/api/v1", categoriesRouter);
-app.use("/api/v1", productsRouter);
-app.use("/api/v1", usersRouter);
-app.use("/api/v1", customersRouter);
 app.use("/api/v1", wishlistRouter);
 
 // test
