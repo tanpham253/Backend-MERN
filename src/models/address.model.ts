@@ -1,4 +1,3 @@
-// address.model.ts
 import { Schema, model, Document } from 'mongoose';
 
 export interface IAddress extends Document {
@@ -8,7 +7,8 @@ export interface IAddress extends Document {
   district?: string;
   ward?: string;
   street?: string;
-  created_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const addressSchema = new Schema<IAddress>(
@@ -19,12 +19,12 @@ const addressSchema = new Schema<IAddress>(
       ref: 'Customer',
       required: true 
     },
-    city: { type: String, required: false },
-    district: { type: String, required: false },
-    ward: { type: String, required: false },
-    street: { type: String, required: false },
+    city: { type: String },
+    district: { type: String },
+    ward: { type: String },
+    street: { type: String },
   },
-  { timestamps: false }
+  { timestamps: true }
 );
 
 const Address = model<IAddress>('Address', addressSchema);

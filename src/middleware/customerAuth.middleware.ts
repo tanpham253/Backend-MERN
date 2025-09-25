@@ -1,55 +1,33 @@
-import { Request, Response, NextFunction } from "express";
+// New middleware to check ownership by address id
 import createError from "http-errors";
+import Address from "../models/address.model";
 import { IUsers } from "../models/users.model";
+import { Request, Response, NextFunction } from "express";
 
-// Middleware to check if user can access customer resources
-export const canAccessCustomerResource = (resourceCustomerIdField: string = 'customer_id') => {
+export const canAccessAddressById = () => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = res.locals.user as IUsers;
-      
-      // Admin and superadmin can access all resources
-      if (user.roles.includes('admin') || user.roles.includes('superadmin')) {
+      const addressId = req.params.id;
+
+      const address = await Address.findById(addressId);
+      if (!address) {
+        return next(createError(404, "Address not found"));
+      }
+
+      // Admins & superadmins can delete any address
+      if (user.roles.includes("admin") || user.roles.includes("superadmin")) {
         return next();
       }
 
-      // For regular users, check if they're accessing their own resources
-      const resourceCustomerId = req.params.customer_id || req.body[resourceCustomerIdField];
-      
-      if (!resourceCustomerId) {
-        return next(createError(400, "Customer ID is required"));
-      }
-
-      // Check if the authenticated user is the owner of the resource
-      if (user._id.toString() !== resourceCustomerId.toString()) {
-        return next(createError(403, "Access denied. You can only access your own resources"));
+      // Regular user can only delete their own address
+      if (user.id.toString() !== address.customer_id.toString()) {
+        return next(createError(403, "Access denied. You can only delete your own address"));
       }
 
       next();
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      next(err);
     }
   };
-};
-
-// Middleware to check if user can access specific customer profile
-export const canAccessCustomerProfile = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const user = res.locals.user as IUsers;
-    const customerId = req.params.id;
-    
-    // Admin and superadmin can access all customer profiles
-    if (user.roles.includes('admin') || user.roles.includes('superadmin')) {
-      return next();
-    }
-
-    // Regular users can only access their own profile
-    if (user._id.toString() !== customerId.toString()) {
-      return next(createError(403, "Access denied. You can only access your own profile"));
-    }
-
-    next();
-  } catch (error) {
-    next(error);
-  }
 };

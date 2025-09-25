@@ -1,0 +1,108 @@
+### create if dont have 1, enable in app.ts
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+    "first_name": "admin",
+    "last_name": "super",
+    "email": "admin@gmail.com",
+    "password": "!Qaz123456",
+    "roles": ["superadmin"],
+    "active": true
+}
+### 🔐 Login as Admin (get token)
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+    "email": "admin@gmail.com",
+    "password": "!Qaz123456"
+}
+### create customer, have to be authorized for now
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDRkZWJiMTk5MjM5ZGQ0ZmY0M2M3ZiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZXMiOlsic3VwZXJhZG1pbiJdLCJpYXQiOjE3NTg3ODM4MzIsImV4cCI6MTc1OTM4ODYzMn0.E0JMfu8gz_8ckX84HKKn8XKTbUS7utxRBSV9Y1oai0E
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "phone_number": "+1234567890",
+  "password": "password",
+  "address_id": "507f1f77bcf86cd799439011",
+  "is_active": true,
+  "fullName": "John Doe"
+}
+### 🔐 Login as Customer (get token)
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+
+{
+  "email": "john.doe@example.com",
+  "password": "password"
+}
+
+###
+# =========================
+# Address CRUD Tests
+# =========================
+
+### 📌 1. Admin: Get all addresses
+GET http://localhost:8080/api/v1/addresses
+Authorization: Bearer {{admin_token}}
+
+### 📌 2. Customer: Get own addresses
+GET http://localhost:8080/api/v1/addresses/customer/{{customer_id}}
+Authorization: Bearer {{customer_token}}
+
+### 📌 3. Customer: Try to access another customer's addresses (should fail 403)
+GET http://localhost:8080/api/v1/addresses/customer/{{other_customer_id}}
+Authorization: Bearer {{customer_token}}
+
+### 📌 4. Customer: Create new address
+POST http://localhost:8080/api/v1/addresses
+Content-Type: application/json
+Authorization: Bearer {{customer_token}}
+
+{
+  "customer_id": "{{customer_id}}",
+  "city": "Ho Chi Minh",
+  "district": "District 1",
+  "ward": "Ward 5",
+  "street": "123 Le Loi"
+}
+
+### 📌 5. Customer: Get address by ID
+GET http://localhost:8080/api/v1/addresses/{{address_id}}
+Authorization: Bearer {{customer_token}}
+
+### 📌 6. Customer: Update own address
+PUT http://localhost:8080/api/v1/addresses/{{address_id}}
+Content-Type: application/json
+Authorization: Bearer {{customer_token}}
+
+{
+  "city": "Ha Noi",
+  "district": "Ba Dinh"
+}
+
+### 📌 7. Customer: Try to update another customer's address (should fail 403)
+PUT http://localhost:8080/api/v1/addresses/{{other_address_id}}
+Content-Type: application/json
+Authorization: Bearer {{customer_token}}
+
+{
+  "city": "Da Nang"
+}
+
+### 📌 8. Customer: Delete own address
+DELETE http://localhost:8080/api/v1/addresses/{{address_id}}
+Authorization: Bearer {{customer_token}}
+
+### 📌 9. Customer: Try to delete another customer's address (should fail 403)
+DELETE http://localhost:8080/api/v1/addresses/{{other_address_id}}
+Authorization: Bearer {{customer_token}}

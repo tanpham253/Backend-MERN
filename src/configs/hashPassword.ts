@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { HookNextFunction, Schema } from "mongoose";
+import { Schema, HookNextFunction } from "mongoose";
 
 const saltRounds = 10;
 
