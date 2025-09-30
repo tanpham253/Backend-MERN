@@ -1,18 +1,41 @@
 //Import thư viện Express
 import express, { NextFunction, Express, Request, Response } from 'express';
+import createError from "http-errors";
+import usersRouter from "./routes/v1/users.route";
+import categoriesRouter from "./routes/v1/categories.route";
+import productsRouter from "./routes/v1/products.route";
+import customersRouter from "./routes/v1/customers.route";
+import ordersRouter from "./routes/v1/orders.route";
+import orderItemsRouter from "./routes/v1/orderItem.route";
+import cartRouter from "./routes/v1/carts.route";
+import cartItemsRouter from "./routes/v1/cartItems.route";
+import wishlistRouter from "./routes/v1/wishlists.route";
+import reviewRouter from "./routes/v1/reviews.route";
+import discountRouter from "./routes/v1/discounts.route";
+import shipmentRouter from "./routes/v1/shipment.route";
+import paymentRouter from "./routes/v1/payment.routes";
+import addressRouter from "./routes/v1/address.route";
+import inventoryRouter from "./routes/v1/inventory.route";
+import supplierRouter from "./routes/v1/supplier.route";
+import brandRouter from "./routes/v1/brands.routes";
+import notificationsRouter from "./routes/v1/notifications.route";
+import rolesRouter from "./routes/v1/roles.routes";
+import auditLogRouter from "./routes/v1/audit_log.route";
+import compression from 'compression';
+import helmet from 'helmet';
+// import { authApiKey } from './middleware/authApiKey.middleware';
+// import authRouter from './routes/v1/auth.route';
+import { ValidationError } from 'yup';
+import cors from "cors";
+import { rateLimit } from 'express-rate-limit';
+
 //Khởi tạo một ứng dụng Express
 const app = express();
 
 // cors
-import cors from "cors";
 app.use(cors())
 
-// able to parse json, built in middleware
-app.use(express.json()); // to parse json body
-app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
-
 // express rate limit
-import { rateLimit } from 'express-rate-limit';
 app.use(rateLimit({
   windowMs: 15 * 60 *1000, // 15 min
   max: 100, // limit each IP 100 request each above time
@@ -23,70 +46,24 @@ app.use(rateLimit({
   }
 }));
 
-// users
-import usersRouter from "./routes/v1/users.route";
-// app.use("/api/v1", usersRouter); // disable this after create admin
-// categories
-import categoriesRouter from "./routes/v1/categories.route";
-// products
-import productsRouter from "./routes/v1/products.route";
-// customers
-import customersRouter from "./routes/v1/customers.route";
-// orders
-import ordersRouter from "./routes/v1/orders.route";
-// order_items
-import orderItemsRouter from "./routes/v1/orderItem.route";
-// cart
-import cartRouter from "./routes/v1/carts.route";
-// cart_items
-import cartItemsRouter from "./routes/v1/cartItems.route";
-// wishlist
-import wishlistRouter from "./routes/v1/wishlists.route";
-// review
-import reviewRouter from "./routes/v1/reviews.route";
-// discount
-import discountRouter from "./routes/v1/discounts.route";
-// shipment
-import shipmentRouter from "./routes/v1/shipment.route";
-// payment
-import paymentRouter from "./routes/v1/payment.routes";
-// address
-import addressRouter from "./routes/v1/address.route";
-// inventory
-import inventoryRouter from "./routes/v1/inventory.route";
-// supplier
-import supplierRouter from "./routes/v1/supplier.route";
-// brand
-import brandRouter from "./routes/v1/brands.routes";
-// notifications
-import notificationsRouter from "./routes/v1/notifications.route";
-// roles
-import rolesRouter from "./routes/v1/roles.routes";
-// audit_log
-import auditLogRouter from "./routes/v1/audit_log.route";
-// utilities
-import compression from 'compression';
-import helmet from 'helmet';
-import { authApiKey } from './middleware/authApiKey.middleware';
 app.use(helmet());
-
-// user authorization
-import authRouter from './routes/v1/auth.route';
-app.use('/api/v1/auth', authRouter);
-
 app.use(compression());
 
-// public
+// able to parse json, built in middleware
+app.use(express.json()); // to parse json body
+app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
+
 app.use("/api/v1", customersRouter);
 app.use("/api/v1", brandRouter);
 app.use("/api/v1", categoriesRouter);
 app.use("/api/v1", productsRouter);
 
-app.use(authApiKey);
-
 // middleware app level example
 // import { appExample } from './middleware/appExample.midleware';
 // app.use(appExample);
+
+// app.use(authApiKey);
+// app.use('/api/v1/auth', authRouter);
 
 // Register all routers with prefix
 app.use("/api/v1", usersRouter);
@@ -107,9 +84,8 @@ app.use("/api/v1", auditLogRouter);
 app.use("/api/v1", wishlistRouter);
 
 // test
-import testRouter from "./routes/v1/test.route";
-import { ValidationError } from 'yup';
-app.use("/api/v1", testRouter);
+// import testRouter from "./routes/v1/test.route";
+// app.use("/api/v1", testRouter);
 
 /*
 // fake object
@@ -139,6 +115,11 @@ app.get("/products/:id", (req: Request, res: Response) => {
   }
 });
 */
+
+// Handle 404 Not Found
+app.use((req, res, next)=>{
+  next(createError(404, 'Not Found'));
+});
 
 //handle other errors
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

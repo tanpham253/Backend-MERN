@@ -6,9 +6,6 @@ import { authenticateToken, authRoles } from "../../middleware/auth.middleware";
 router.get("/categories", categoriesController.findAll);
 router.get("/categories/:id", categoriesController.findById);
 
-// all routes below use authenticate
-router.use(authenticateToken);
-
 router.post("/categories", authRoles(["admin", "superadmin"]), categoriesController.create);
 router.delete("/categories/:id", authRoles(["admin", "superadmin"]), categoriesController.deleteById);
 router.put("/categories/:id", authRoles(["admin", "superadmin"]), categoriesController.updateById);
