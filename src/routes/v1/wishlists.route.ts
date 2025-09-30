@@ -15,7 +15,7 @@ const router = Router();
 // All routes require authentication
 router.use(authenticateToken);
 
-router.get('/wishlists', authRoles(["admin", "superadmin"]), wishlistController.findAll);
+router.get('/wishlists', authRoles(["admin", "admin"]), wishlistController.findAll);
 router.get('/wishlists/customer/:customer_id', validateSchemaYup(wishlistValidation.findByCustomerId), checkCustomerIdOwnership(), wishlistController.findByCustomerId);
 router.get('/wishlists/:id', validateSchemaYup(wishlistValidation.findById), checkCustomerOwnership('wishlist'), wishlistController.findById);
 router.post('/wishlists', validateSchemaYup(wishlistValidation.create), checkCustomerCreateOwnership(), wishlistController.create);

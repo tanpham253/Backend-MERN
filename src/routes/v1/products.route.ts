@@ -11,8 +11,8 @@ router.get("/products/:id", validateSchemaYup(productValidation.findById), produ
 // all routes below use authenticate
 router.use(authenticateToken);
 
-router.post("/products", authRoles(["admin", "superadmin"]), validateSchemaYup(productValidation.create), productsController.create); 
-router.delete("/products/:id", authRoles(["admin", "superadmin"]), validateSchemaYup(productValidation.deleteById), productsController.deleteById); 
-router.put("/products/:id", authRoles(["admin", "superadmin"]), validateSchemaYup(productValidation.updateById), productsController.updateById); 
+router.post("/products", authRoles(["admin", "admin"]), validateSchemaYup(productValidation.create), productsController.create); 
+router.delete("/products/:id", authRoles(["admin", "admin"]), validateSchemaYup(productValidation.deleteById), productsController.deleteById); 
+router.put("/products/:id", authRoles(["admin", "admin"]), validateSchemaYup(productValidation.updateById), productsController.updateById); 
 
 export default router;

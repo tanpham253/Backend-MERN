@@ -8,7 +8,7 @@ x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
     "last_name": "super",
     "email": "admin@gmail.com",
     "password": "!Qaz123456",
-    "roles": ["superadmin"],
+    "roles": ["admin"],
     "active": true
 }
 ###

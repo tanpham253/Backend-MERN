@@ -4,9 +4,9 @@ import { applyPasswordHashing } from "../configs/hashPassword";
 import { number } from "yup";
 
 export interface IUsers extends Document {
-  roles: string[];
   first_name: string;
   last_name: string;
+  roles: string[];
   password: string;
   email: string;
   is_active?: boolean;
@@ -18,7 +18,7 @@ const usersSchema = new Schema(
     roles: {
       type: [String],
       default: ["staff"],
-      enum: ["staff", "admin", "superadmin"],
+      enum: ["staff", "admin"],
     },
 
     password: {

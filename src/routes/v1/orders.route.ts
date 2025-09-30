@@ -15,7 +15,7 @@ const router = Router();
 // All routes require authentication
 router.use(authenticateToken);
 
-router.get('/orders', authRoles(["admin", "superadmin"]), ordersController.findAll);
+router.get('/orders', authRoles(["admin", "admin"]), ordersController.findAll);
 router.get('/orders/customer/:customer_id', validateSchemaYup(orderValidation.findByCustomerId), checkCustomerIdOwnership(), ordersController.findByCustomerId);
 router.get('/orders/:id', validateSchemaYup(orderValidation.findById), checkCustomerOwnership('order'), ordersController.findById);
 router.post('/orders', validateSchemaYup(orderValidation.create), checkCustomerCreateOwnership(), ordersController.create);

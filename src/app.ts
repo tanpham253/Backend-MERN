@@ -3,6 +3,9 @@ import express, { NextFunction, Express, Request, Response } from 'express';
 //Khởi tạo một ứng dụng Express
 const app: Express = express();
 
+import cors from "cors"
+app.use(cors());
+
 // able to parse json, built in middleware
 app.use(express.json()); // to parse json body
 app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
@@ -27,7 +30,7 @@ import categoriesRouter from "./routes/v1/categories.route";
 // products
 import productsRouter from "./routes/v1/products.route";
 // customers
-import customersRouter from "./routes/v1/customers.route";
+// import customersRouter from "./routes/v1/customers.route";
 // orders
 import ordersRouter from "./routes/v1/orders.route";
 // order_items
@@ -73,7 +76,7 @@ app.use('/api/v1/auth', authRouter);
 app.use(compression());
 
 // public
-app.use("/api/v1", customersRouter);
+// app.use("/api/v1", customersRouter);
 app.use("/api/v1", brandRouter);
 app.use("/api/v1", categoriesRouter);
 app.use("/api/v1", productsRouter);
