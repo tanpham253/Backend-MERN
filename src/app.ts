@@ -1,7 +1,11 @@
 //Import thư viện Express
 import express, { NextFunction, Express, Request, Response } from 'express';
 //Khởi tạo một ứng dụng Express
-const app: Express = express();
+const app = express();
+
+// cors
+import cors from "cors";
+app.use(cors())
 
 // able to parse json, built in middleware
 app.use(express.json()); // to parse json body

@@ -1,97 +1,92 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, ObjectId } from "mongoose";
 
 export interface IProduct extends Document {
   product_name: string;
-  category_id: { type: Schema.Types.ObjectId, ref: "categories", required: true },
-  brand_id: { type: Schema.Types.ObjectId, ref: "brands", required: true },
   description?: string;
-  slug: string;
-  sku: string;
   price: number;
+  discount: number;
   stock: number;
-  image_url?: string;
-  variant?: string;
-  isDeleted?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  model_year: number;
+  category_id: ObjectId;
+  brand_id: ObjectId;
+  slug: string;
+  thumbnail?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const productSchema = new Schema(
-  {
+const productSchema = new Schema({
+    // Khai báo các trường dữ liệu của mô hình Product
     product_name: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      minlength: 3,
-      maxlength: 255,
+        type: String,
+        required: true,
+        unique: true, // Đảm bảo tên sản phẩm là duy nhất
+        trim: true, // Loại bỏ khoảng trắng thừa
+        minLength: 3, // Đặt độ dài tối thiểu cho tên sản phẩm
+        maxLength: 255 // Đặt độ dài tối đa cho tên sản phẩm
     },
-    category_id: {
-      type: Schema.Types.ObjectId,
-      ref: 'Category',
-      required: true,
-    },
-    brand_id: {
-      type: Schema.Types.ObjectId,
-      ref: 'Brand',
-      required: true,
-    },
-    description: { 
-      type: String, 
-      required: false, 
-      maxlength: 5000 },
-    slug: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-      minlength: 3,
-      maxlength: 255,
-    },
-    sku: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      uppercase: true,
-      minlength: 3,
-      maxlength: 100,
+    description: {
+        type: String,
+        required: false,
+        maxLength: 500 // Đặt độ dài tối đa cho mô tả
     },
     price: {
-      type: Number,
-      required: true,
-      min: 0,
+        type: Number,
+        required: true,
+        min: 0, // Giá không được âm
+        default: 0 // Giá mặc định là 0
+    },
+    discount: { 
+        type: Number,
+        required: true,
+        min: 0, // Giảm giá không được âm
+        max: 70, // Giảm giá tối đa là 70%
+        default: 0 // Giảm giá mặc định là 0%
     },
     stock: {
-      type: Number,
-      required: true,
-      min: 0,
-      default: 0,
+        type: Number,
+        required: true,
+        min: 0, // Số lượng không được âm
+        default: 0 // Số lượng mặc định là 0
     },
-    image_url: {
-      type: String,
-      required: false,
-      trim: true,
+    model_year: {
+        type: Number,
+        required: true,
+        min: 1900, // Năm không được nhỏ hơn 1900
+        max: new Date().getFullYear() // Năm không được lớn hơn năm hiện tại
     },
-    variant: [
-      {
+    //Thiết lập quan hệ với Category
+    category_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category', // Liên kết với mô hình Category
+        required: true // Bắt buộc phải có category_id
+    },
+    brand_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Brand', // Liên kết với mô hình Brand
+        required: true // Bắt buộc phải có brand_id
+    },
+    slug: {
         type: String,
-        trim: true,
-      },
-    ],
-    isDeleted: {
-      type: Boolean,
-      default: false,
+        required: true,
+        unique: true,
+        trim: true, // Loại bỏ khoảng trắng thừa
+        lowercase: true, // Chuyển đổi slug thành chữ thường
+        minLength: 3, // Đặt độ dài tối thiểu cho slug
+        maxLength: 255 // Đặt độ dài tối đa cho slug
     },
-  }, // schema options 2nd argument (tham so)
-  {
-    timestamps: true, // createdAt, updatedAt
-    versionKey: false, // __v
-    // collection: "products", // custom collection name or else default name at the line below
-  }
-);
+    thumbnail: {
+        type: String,
+        required: false,
+        trim: true, // Loại bỏ khoảng trắng thừa
+        maxLength: 255 // Đặt độ dài tối đa cho thumbnail
+    }
+}, {
+    timestamps: true, // Tự động thêm trường createdAt và updatedAt
+    versionKey: false, // Tắt trường __v
+});
 
-
-const product = model("Product", productSchema);
-export default product;
+// b2: Tạo mô hình Product từ schema
+const Product = model('Product', productSchema);    
+// b3: Xuất mô hình Product để sử dụng ở nơi khác
+export default Product;

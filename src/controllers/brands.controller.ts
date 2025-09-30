@@ -4,17 +4,17 @@ import * as brandService from '../services/brands.service';
 
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const docs = await brandService.findAll();
-    res.json(docs);
-  } catch (error) {
-    next(error);
+    const brand = await brandService.findAll();
+    res.json(brand); // <-- always send JSON
+  } catch (err) {
+    next(err);
   }
 };
 
 export const findById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const doc = await brandService.findById(req.params.id);
-    res.json(doc);
+    const brand = await brandService.findById(req.params.id);
+    res.json(brand);
   } catch (error) {
     next(error);
   }
@@ -22,8 +22,8 @@ export const findById = async (req: Request, res: Response, next: NextFunction) 
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const doc = await brandService.create(req.body);
-    res.status(201).json(doc);
+    const brand = await brandService.create(req.body);
+    res.status(201).json(brand);
   } catch (error) {
     next(error);
   }
@@ -31,8 +31,8 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 
 export const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const doc = await brandService.remove(req.params.id);
-    res.json(doc);
+    const brand = await brandService.remove(req.params.id);
+    res.json(brand);
   } catch (error) {
     next(error);
   }
@@ -40,8 +40,8 @@ export const deleteById = async (req: Request, res: Response, next: NextFunction
 
 export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const doc = await brandService.update(req.params.id, req.body);
-    res.json(doc);
+    const brand = await brandService.update(req.params.id, req.body);
+    res.json(brand);
   } catch (error) {
     next(error);
   }

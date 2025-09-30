@@ -2,7 +2,8 @@
 import Brand from '../models/brands.model';
 
 export const findAll = async () => {
-  return await Brand.find();
+  const brandDB = await Brand.find();
+  return brandDB;
 };
 
 export const findById = async (id: string) => {

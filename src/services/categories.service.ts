@@ -17,7 +17,7 @@ const findById = async (id: string) => {
 
 const create = (payload: ICategory) => {
   const newCategory = new Category({
-    name: payload.name,
+    category_name: payload.category_name,
     description: payload.description,
     slug: payload.slug,
   });

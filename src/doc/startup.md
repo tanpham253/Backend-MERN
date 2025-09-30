@@ -234,3 +234,10 @@ pnpm install helmet
 ```
 pnpm i express-rate-limit
 ```
+## Crossorigin
+```
+pnpm i cors
+```
+```
+pnpm install --save-dev @types/cors
+```

@@ -1,102 +1,153 @@
 import createError from "http-errors";
-import Product, { IProduct } from "../models/products.model";
-import mongoose from "mongoose";
+import Product from "../models/products.model";
+import Category from "../models/categories.model";
 
-const findAll = async (query: any) => {
-  // pagination
-  console.log("query", query);
-  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by = 'createdAt', cat_id = null, brand_id = null } = query;
+/* BEGIN PUBLIC SERVICE */
+const findHomeProducts = async({
+  catId,
+  limit=5
+}: {catId: string, limit: number}) => {
+  const products = await Product.find({
+    category_id: catId
+  })
+  .select("-createdAt -updatedAt -description")
+    .limit(limit)
+    .populate("category_id", "category_name")
+    .populate("brand_id", "brand_name");
+  return products;
+};
 
-  console.log("keyword", keyword);
-  console.log("cat_id", cat_id);
-  console.log("brand_id", brand_id);
+const getProductsByCategorySlug = async (cate_slug: string, query: any) => {
+  console.log('<<=== 🚀 query ===>>', query);
+  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by = 'createdAt', brand_id = null } = query;
+
+  // Truy vấn category để lấy _id từ slug
+  const category = await Category.findOne({ slug: cate_slug });
+  if (!category) {
+    return { products: [], page, limit, totalRecords: 0 };
+  }
+
+  console.log('<<=== 🚀 category ===>>', category);
 
   let sortObject = {};
-  sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1};
+  sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1 };
 
-  const where: any = {};
-  // add filter to where
-
-  if(keyword){  // keyword not null
-    where.product_name = {$regex: keyword, $options: 'i'};
+  let where = { };
+  if (keyword) {
+    where = { ...where, product_name: { $regex: keyword, $options: 'i' } };
   }
-
-  if(cat_id) {
-    where.category_id = new mongoose.mongo.ObjectId(cat_id); // object casting
-  }
-
-  if(brand_id) {
-    where.brand_id = new mongoose.mongo.ObjectId(brand_id);
+  if (brand_id) {
+    where = { ...where, brand_id };
   }
 
   const skip = (page - 1) * limit;
-  const productDB = await Product.find({ ...where })
-    .populate('category_id', 'name slug')
-    .populate('brand_id', 'name slug')
+  const products = await Product.find({
+    ...where,
+    category_id: category._id
+  })
     .skip(skip)
     .limit(limit)
-    .sort({ ...sortObject });
-    
+    .sort(sortObject)
+    .populate('category_id', 'category_name slug')
+    .populate('brand_id', 'brand_name');
+
+  const totalRecords = await Product.countDocuments({
+    ...where,
+    category_id: category._id
+  });
+
   return {
-    productDB,
-    page, // current page number
+    products,
+    page,
+    limit,
+    totalRecords,
+  };
+};
+
+/* END PUBLIC SERVICE */
+
+const findAll = async (query: any) => {
+  console.log('<<=== 🚀 query ===>>',query);
+  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by='createdAt', cat_id = null, brand_id = null } = query;
+
+  console.log('<<=== 🚀 keyword ===>>',keyword);
+
+  let sortObject = {};
+    sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1 };
+
+  const where: any = {};
+  //Nếu cần lọc thì đưa vào where
+  if(keyword) {
+    where.product_name = { $regex: keyword, $options: 'i' };
+  }
+  if(cat_id) {
+    where.category_id = cat_id;
+  }
+  if(brand_id) {
+    where.brand_id = brand_id;
+  }
+
+  const skip = (page - 1) * limit;
+  const products = await Product.find({
+    ...where,
+  })
+    .skip(skip)
+    .limit(limit)
+    .sort({...sortObject})
+    .populate("category_id", "category_name")
+    .populate("brand_id", "brand_name");
+  return {
+    products,
+    page,
     limit,
     totalRecords: await Product.countDocuments(),
   };
 };
 
 const findById = async (id: string) => {
-  const product = await Product.findById(id)
-    .populate('category_id', 'name slug description')
-    .populate('brand_id', 'name slug description');
+  const product = await Product.findById(id);
   if (!product) {
-    throw createError(404, "Product not found");
+    throw createError(400, "Product not found");
   }
   return product;
 };
 
-const create = (payload: any) => {
+const create = async(payload: any) => {
   const newProduct = new Product({
-    category_id: payload.category_id,
-    brand_id: payload.brand_id,
     product_name: payload.product_name,
     description: payload.description,
-    slug: payload.slug,
-    sku: payload.sku,
     price: payload.price,
+    discount: payload.discount,
     stock: payload.stock,
-    image_url: payload.image_url,
-    variant: payload.variant,
-    isDeleted: payload.isDeleted,
+    model_year: payload.model_year,
+    category_id: payload.category_id,
+    brand_id: payload.brand_id,
+    slug: payload.slug,
+    thumbnail: payload.thumbnail, //uploads/bi-1755776296973.png
   });
   newProduct.save();
   return newProduct;
 };
 
-const updateById = async (id: string, payload: IProduct) => {
-  // https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()
-  const updatedProduct = await Product.findByIdAndUpdate(id, payload, {
-    new: true, // return modified instead
-    runValidators: true, // is it valid with model in Product
-  });
-  if (!updatedProduct) {
-    throw createError(404, "Product not found");
-  }
-  return updatedProduct;
+const updateById = async (id: string, payload: any) => {
+  const product = await findById(id);
+  Object.assign(product, payload);
+  await product.save();
+  return product;
 };
 
 const deleteById = async (id: string) => {
-  const deleteProduct = await Product.findByIdAndDelete(id);
-  if (!deleteProduct) {
-    throw createError(404, "Product not found");
-  }
-  return deleteProduct;
+  const product = await findById(id);
+  await Product.findByIdAndDelete(product._id);
+  return product;
 };
 
 export default {
   findAll,
   findById,
   create,
+  deleteById,
   updateById,
-  deleteById
+  findHomeProducts,
+  getProductsByCategorySlug
 };

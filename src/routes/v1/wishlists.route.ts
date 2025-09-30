@@ -13,7 +13,7 @@ import {
 const router = Router();
 
 // All routes require authentication
-router.use(authenticateToken);
+// router.use(authenticateToken);
 
 router.get('/wishlists', authRoles(["admin", "superadmin"]), wishlistController.findAll);
 router.get('/wishlists/customer/:customer_id', validateSchemaYup(wishlistValidation.findByCustomerId), checkCustomerIdOwnership(), wishlistController.findByCustomerId);
