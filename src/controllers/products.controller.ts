@@ -2,6 +2,38 @@ import { NextFunction, Request, Response } from "express";
 import productsService from "../services/products.service";
 import sendJsonSuccess from "../helper/response.helper";
 
+const uploadSingle = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+       
+        sendJsonSuccess(res, [], 'Product uploaded successfully');
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getProductsByCategorySlug = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const products = await productsService.getProductsByCategorySlug(req.params.slug, req.query);
+        sendJsonSuccess(res, products);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const findHomeProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const products = await productsService.findHomeProducts({
+            catId: req.params.catId,
+            limit: req.query.limit ? parseInt(req.query.limit as string) : 5
+        });
+        console.log('<<=== 🚀 products Controller ===>>', req.params.catId);
+        console.log('<<=== 🚀 products Controller ===>>', products);
+        sendJsonSuccess(res, products);
+    } catch (error) {
+        next(error);
+    }
+};
+
 // Hàm lấy tất cả sản phẩm
 const findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -60,5 +92,8 @@ export default {
     findById,
     create,
     deleteById,
-    updateById
+    updateById,
+    uploadSingle,
+    findHomeProducts,
+    getProductsByCategorySlug
 };

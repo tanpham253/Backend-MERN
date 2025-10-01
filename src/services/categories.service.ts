@@ -1,54 +1,84 @@
 import createError from "http-errors";
 import Category, { ICategory } from "../models/categories.model";
 
-// doc on mogoose offical site
-const findAll = async () => {
-  const categoryDB = await Category.find();
-  return categoryDB;
-};
+const getCategoryTree = async()=>{
+  const categoriesDB =  await Category
+  .find()
+  .select("_id category_name slug"); // only these fields will be returned
+  return categoriesDB;
+}
 
+const findAll = async () => {
+  //buộc phải có return
+  const categoriesDB =  await Category.find();
+  //console.log('<<=== 🚀  categoriesDB===>>',categoriesDB);
+  return categoriesDB;
+};
+ 
 const findById = async (id: string) => {
+  //const category = categories.find((cat) => cat.id === id);
   const category = await Category.findById(id);
   if (!category) {
-    throw createError(404, "Category not found");
+    throw createError(400, "Category not found");
   }
   return category;
 };
 
 const create = (payload: ICategory) => {
+  // const newCategory = {
+  //   id: categories.length + 1,
+  //   name: payload.name,
+  // };
+  // categories.push(newCategory);
   const newCategory = new Category({
-    name: payload.name,
+    category_name: payload.category_name,
     description: payload.description,
     slug: payload.slug,
   });
   newCategory.save();
+
   return newCategory;
 };
 
 const updateById = async (id: string, payload: ICategory) => {
-    // https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()
-  const updatedCategory = await Category.findByIdAndUpdate(id, payload, {
-    new: true, // return modified instead
-    runValidators: true, // is it valid with model in Category
-  });
-  if (!updatedCategory) {
-    throw createError(404, "Category not found");
-  }
-  return updatedCategory;
+  //step1: check id tồn tại không
+  const category = await findById(id);
+
+  //step2: cập nhật category
+  // await Category.updateOne({ _id: id }, 
+  //   {
+  //     category_name: payload.category_name,
+  //     description: payload.description,
+  //     slug: payload.slug,
+  // })
+
+  //Tận dụng kết nối từ hàm findById
+  Object.assign(category, payload);
+  await category.save();
+
+  return category;
 };
 
 const deleteById = async (id: string) => {
-  const deleteCategory = await Category.findByIdAndDelete(id);
-  if (!deleteCategory) {
-    throw createError(404, "Category not found");
-  }
-  return deleteCategory;
+  // const categoryIndex = categories.findIndex((cat) => cat.id ===id);
+
+  // if (categoryIndex === -1) {
+  //   throw createError(400, "Category not found");
+  // }
+  // categories.splice(categoryIndex, 1);
+  //step1: check id tồn tại không
+  const category = await findById(id);
+  //step2: xóa category
+  await Category.findByIdAndDelete(category._id);
+  return category; //return về category đã xóa để có thể sử dụng trong response
+  
 };
 
 export default {
   findAll,
   findById,
   create,
-  updateById,
   deleteById,
+  updateById,
+  getCategoryTree
 };

@@ -15,7 +15,7 @@ export const checkCustomerOwnership = (resourceType: 'address' | 'cart' | 'order
       const customerId = req.params.customer_id;
 
       // Admin and admin can access all resources
-      if (user.roles.includes("admin") || user.roles.includes("admin")) {
+      if (user.roles.includes("admin")) {
         return next();
       }
 
@@ -63,7 +63,7 @@ export const checkCustomerIdOwnership = () => {
       const customerId = req.params.customer_id;
 
       // Admin and admin can access all customer resources
-      if (user.roles.includes("admin") || user.roles.includes("admin")) {
+      if (user.roles.includes("admin")) {
         return next();
       }
 
@@ -87,7 +87,7 @@ export const checkCustomerCreateOwnership = () => {
       const customerId = req.body.customer_id;
 
       // Admin and admin can create resources for any customer
-      if (user.roles.includes("admin") || user.roles.includes("admin")) {
+      if (user.roles.includes("admin")) {
         return next();
       }
 

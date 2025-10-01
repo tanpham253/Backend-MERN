@@ -81,7 +81,7 @@ app.use("/api/v1", brandRouter);
 app.use("/api/v1", categoriesRouter);
 app.use("/api/v1", productsRouter);
 
-app.use(authApiKey);
+// app.use(authApiKey);
 
 // middleware app level example
 // import { appExample } from './middleware/appExample.midleware';

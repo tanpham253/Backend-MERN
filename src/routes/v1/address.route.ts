@@ -13,7 +13,7 @@ const router = Router();
 
 router.use(authenticateToken);
 
-router.get('/addresses', authRoles(["admin", "admin"]), addressController.findAll);
+router.get('/addresses', authRoles(["admin"]), addressController.findAll);
 router.get('/addresses/customer/:customer_id', validateSchemaYup(addressValidation.findByCustomerId), checkCustomerIdOwnership(), addressController.findByCustomerId);
 router.get('/addresses/:id', validateSchemaYup(addressValidation.findById), checkCustomerOwnership('address'), addressController.findById); 
 router.post('/addresses', validateSchemaYup(addressValidation.create), checkCustomerCreateOwnership(), addressController.create);

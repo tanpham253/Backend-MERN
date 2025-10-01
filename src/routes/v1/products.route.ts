@@ -5,14 +5,20 @@ import { validateSchemaYup } from '../../middleware/validateSchema.middleware';
 import productValidation from '../../validations/product.validation';
 import { authenticateToken, authRoles } from '../../middleware/auth.middleware';
 
+/** PUBLIC ROUTES */
+// GET /api/v1/products/home/:catId?limit=5
+router.get('/products/home/:catId', productsController.findHomeProducts);
+// GET /api/v1/products/category/:slug
+router.get('/products/category/:slug', productsController.getProductsByCategorySlug);
+
+// products for home page
+router.get('/products/home', productsController.findHomeProducts);
+
 router.get("/products", productsController.findAll); 
 router.get("/products/:id", validateSchemaYup(productValidation.findById), productsController.findById); 
 
-// all routes below use authenticate
-router.use(authenticateToken);
-
-router.post("/products", authRoles(["admin", "admin"]), validateSchemaYup(productValidation.create), productsController.create); 
-router.delete("/products/:id", authRoles(["admin", "admin"]), validateSchemaYup(productValidation.deleteById), productsController.deleteById); 
-router.put("/products/:id", authRoles(["admin", "admin"]), validateSchemaYup(productValidation.updateById), productsController.updateById); 
+router.post("/products", productsController.create); 
+router.delete("/products/:id", productsController.deleteById); 
+router.put("/products/:id", productsController.updateById); 
 
 export default router;
