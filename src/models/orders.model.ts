@@ -1,51 +1,151 @@
-// orders.model.ts
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { IOrder, OrderModelType, TOrderItems } from '../types/models';
 
-export interface IOrder extends Document {
-  customer_id: Schema.Types.ObjectId;
-  order_items?: Schema.Types.ObjectId[];
-  shipment_id?: Schema.Types.ObjectId;
-  discount_id?: Schema.Types.ObjectId;
-  payment_id?: Schema.Types.ObjectId;
-  status: string;
-  total_amount: number;
-  order_date?: Date;
-  updated_at?: Date;
-}
-
-const orderSchema = new Schema<IOrder>(
-  {
-    customer_id: { 
-      type: Schema.Types.ObjectId, 
-      ref: 'Customer',
-      required: true 
-    },
-    order_items: [{ 
-      type: Schema.Types.ObjectId, 
-      ref: 'OrderItem'
-    }],
-    shipment_id: { 
-      type: Schema.Types.ObjectId, 
-      ref: 'Shipment',
-      required: false 
-    },
-    discount_id: { 
-      type: Schema.Types.ObjectId, 
-      ref: 'Discount',
-      required: false 
-    },
-    payment_id: { 
-      type: Schema.Types.ObjectId, 
-      ref: 'Payment',
-      required: false 
-    },
-    status: { type: String, required: true, trim: true, maxlength: 50 },
-    total_amount: { type: Number, required: true },
-    order_date: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now },
+const orderItemsSchema = new Schema<TOrderItems>({
+  product: {
+    type: Schema.Types.ObjectId,
+    ref: "Product",
+    require: true
   },
-  { timestamps: false }
+  quantity: {
+    type: Number,
+    min: 1
+  },
+  price: {
+    type: Number,
+    min: 0
+  },
+  discount: {
+    type: Number,
+    min: 0
+  }
+})
+
+const ordersSchema = new Schema<IOrder, OrderModelType>({
+  customer: {
+    type: Schema.Types.ObjectId, //_id
+    ref: 'Customer',
+    required: true,
+  },
+  //Staff là người duyệt đơn, mặc định đơn mới chưa có người duyệt
+  staff: {
+    type: Schema.Types.ObjectId, //_id
+    ref: 'Staff',
+    required: false,
+    default: null, // mặc định null chưa có người duyệt
+  },
+  order_status: {
+    type: Number,
+    required: false,
+    /**
+     * Order status: 
+     * 1 = Pending; 
+     * 2 = Processing; 
+     * 3 = Rejected; 
+     * 4 = Completed
+     */
+    enum:[1,2,3,4],
+    default: 1, // mặc định khi tạo đơn mới
+  },
+  payment_type: {
+    type: Number,
+    required: false,
+    /**
+     * payment type: 
+     * 1 = COD; 
+     * 2 = Credit; 
+     * 3 = ATM; 
+     * 4 = Cash
+     */
+    enum:[1,2,3,4],
+    default: 4, // mặc định khi tạo đơn mới
+  },
+  order_date: {
+    type: Date,
+    required: false,
+    default: new Date, //mặc định lấy time hiện tại
+  },
+  require_date: {
+    type: Date,
+    required: false,
+    default: null, //mặc định null
+  },
+  shipping_date: {
+    type: Date,
+    required: false,
+    default: null, //mặc định null
+  },
+  order_note: {
+    type: String,
+    required: false
+  },
+  first_name: {
+    type: String,
+    required: true,
+    maxLength: 50
+  },
+  last_name: {
+    type: String,
+    required: true,
+    maxLength: 50
+  },
+  phone: {
+    type: String,
+    required: true,
+    unique: true,
+    maxLength: 50
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    maxLength: 150
+  },
+  street: {
+    type: String,
+    required: true,
+    maxLength: 255
+  },
+  city: {
+    type: String,
+    required: true,
+    maxLength: 50
+  },
+  state: {
+    type: String,
+    required: true,
+    maxLength: 50
+  },
+  zip_code: {
+    type: String,
+    maxLength: 5,
+    require: false,
+  },
+  order_items: [orderItemsSchema], //mảng sản phẩm
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    required: false
+  },
+  /* 
+   Soft delete 
+   Khi xóa sp thì đi update isDelete = true
+   thực tế chỉ được xóa đơn hàng đã hủy
+   */
+   isDelete: {
+    type: Boolean,
+    require: false,
+    default: false
+  },
+},
+{
+  timestamps: true, 
+  
+}
 );
 
-const Order = model<IOrder>('Order', orderSchema);
-export default Order;
+
+
+const Order = model<IOrder, OrderModelType>('Order', ordersSchema);
+
+export default Order

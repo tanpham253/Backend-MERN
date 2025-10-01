@@ -1,66 +1,60 @@
-// orders.controller.ts
-import { Request, Response, NextFunction } from 'express';
-import * as ordersService from '../services/orders.service';
-import sendJsonSuccess from '../helper/response.helper';
+import { NextFunction, Request, Response } from "express";
+import orderService from "../services/orders.service";
+import sendJsonSuccess from "../helper/response.helper";
 
-export const findAll = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const orders = await ordersService.findAll();
-    sendJsonSuccess(res, orders);
-  } catch (error) {
-    next(error);
-  }
+const findAll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const orders = await orderService.findAll(req.query);
+        sendJsonSuccess(res, orders);
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const findById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const order = await ordersService.findById(req.params.id);
-    sendJsonSuccess(res, order);
-  } catch (error) {
-    next(error);
-  }
+const findById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const order = await orderService.findById(id);
+        sendJsonSuccess(res, order);
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const findByCustomerId = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const orders = await ordersService.findByCustomerId(req.params.customer_id);
-    sendJsonSuccess(res, orders);
-  } catch (error) {
-    next(error);
-  }
+const create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const order = await orderService.create(req.body);
+        //TODO: send email
+        sendJsonSuccess(res, order, 'Order created successfully', 201);
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const create = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const order = await ordersService.create(req.body);
-    sendJsonSuccess(res, order, "Order created successfully", 201);
-  } catch (error) {
-    next(error);
-  }
+const updateById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const order = await orderService.updateById(id, req.body);
+        sendJsonSuccess(res, order, 'Order updated successfully');
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const deleteById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const doc = await ordersService.remove(req.params.id);
-    sendJsonSuccess(res, doc, "Order deleted successfully");
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const doc = await ordersService.update(req.params.id, req.body);
-    sendJsonSuccess(res, doc, "Order updated successfully");
-  } catch (error) {
-    next(error);
-  }
+const deleteById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const order = await orderService.deleteById(id);
+        sendJsonSuccess(res, order, 'Order deleted successfully');
+    } catch (error) {
+        next(error);
+    }
 };
 
 export default {
     findAll,
     findById,
     create,
-    deleteById,
-    updateById
+    updateById,
+    deleteById
 };
