@@ -1,5 +1,10 @@
 //Import thư viện Express
 import express, { NextFunction, Express, Request, Response } from 'express';
+
+import testRouter from "./routes/v1/test.route";
+import { ValidationError } from 'yup';
+import path from 'path';
+
 //Khởi tạo một ứng dụng Express
 const app: Express = express();
 
@@ -83,6 +88,9 @@ app.use("/api/v1", productsRouter);
 
 // app.use(authApiKey);
 
+// static files
+app.use(express.static(path.join(__dirname, '../public')));
+
 // middleware app level example
 // import { appExample } from './middleware/appExample.midleware';
 // app.use(appExample);
@@ -106,8 +114,6 @@ app.use("/api/v1", auditLogRouter);
 app.use("/api/v1", wishlistRouter);
 
 // test
-import testRouter from "./routes/v1/test.route";
-import { ValidationError } from 'yup';
 app.use("/api/v1", testRouter);
 
 /*

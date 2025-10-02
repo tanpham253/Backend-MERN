@@ -234,3 +234,24 @@ pnpm install helmet
 ```
 pnpm i express-rate-limit
 ```
+
+## multer to upload files
+```
+pnpm i multer
+```
+```
+pnpm install --save-dev @types/multer
+```
+
+## slugify for upload
+```
+pnpm i slugify
+```
+
+## nodemailer
+```
+pnpm i nodemailer
+```
+```
+pnpm i --save-dev @types/nodemailer
+```

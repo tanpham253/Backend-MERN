@@ -23,3 +23,6 @@ get http://localhost:8080/api/v1/products?page=1
 ###
 get http://localhost:8080/api/v1/categories
 x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+###
+POST http://localhost:9000/api/v1/send-mail
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDRkZWJiMTk5MjM5ZGQ0ZmY0M2M3ZiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNzU5NDIzMzA0LCJleHAiOjE3NjAwMjgxMDR9.WojjoLZPJxmGA7BkNg9dao0BHIaHP-Gp5Lszkt9vNBY
