@@ -9,7 +9,7 @@ import path from 'path';
 const app: Express = express();
 
 import cors from "cors"
-app.use(cors());
+app.use(cors()); // enable All CORS Requests
 
 // able to parse json, built in middleware
 app.use(express.json()); // to parse json body
@@ -72,7 +72,9 @@ import auditLogRouter from "./routes/v1/audit_log.route";
 import compression from 'compression';
 import helmet from 'helmet';
 import { authApiKey } from './middleware/authApiKey.middleware';
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
 
 // user authorization
 import authRouter from './routes/v1/auth.route';

@@ -67,28 +67,28 @@ const deleteById = async (id: string) => {
   return user;
 };
 
-const addRole = async (id: string, role: string) => {
-  const user = await findById(id);
-  //check duplicate role
-  if (user.roles.includes(role)) {
-    throw createError(400, "Role already exists");
-  }
-  user.roles.push(role);
-  await user.save();
-  return user;
-};
+// const addRole = async (id: string, role: string) => {
+//   const user = await findById(id);
+//   //check duplicate role
+//   if (user.roles.includes(role)) {
+//     throw createError(400, "Role already exists");
+//   }
+//   user.roles.push(role);
+//   await user.save();
+//   return user;
+// };
 
-const removeRole = async (id: string, role: string) => {
+// const removeRole = async (id: string, role: string) => {
 
-  const user = await findById(id);
-  //check role exists
-  if (!user.roles.includes(role)) {
-    throw createError(400, "Role not found");
-  }
-  user.roles = user.roles.filter((r: string) => r !== role);
-  await user.save();
-  return user;
-};
+//   const user = await findById(id);
+//   //check role exists
+//   if (!user.roles.includes(role)) {
+//     throw createError(400, "Role not found");
+//   }
+//   user.roles = user.roles.filter((r: string) => r !== role);
+//   await user.save();
+//   return user;
+// };
 
 export default {
   findAll,
@@ -96,6 +96,6 @@ export default {
   create,
   deleteById,
   updateById,
-  addRole,
-  removeRole
+  // addRole,
+  // removeRole
 };

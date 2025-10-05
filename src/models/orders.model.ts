@@ -22,15 +22,15 @@ const orderItemsSchema = new Schema<TOrderItems>({
 })
 
 const ordersSchema = new Schema<IOrder, OrderModelType>({
-  customer: {
+  customer_id: {
     type: Schema.Types.ObjectId, //_id
     ref: 'Customer',
     required: true,
   },
   //Staff là người duyệt đơn, mặc định đơn mới chưa có người duyệt
-  staff: {
+  staff_id: {
     type: Schema.Types.ObjectId, //_id
-    ref: 'Staff',
+    ref: 'User',
     required: false,
     default: null, // mặc định null chưa có người duyệt
   },
@@ -139,8 +139,7 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
   },
 },
 {
-  timestamps: true, 
-  
+  timestamps: true,
 }
 );
 

@@ -1,9 +1,8 @@
 // users.model.ts
 import { Schema, model, Document } from "mongoose";
 import { applyPasswordHashing } from "../configs/hashPassword";
-import { number } from "yup";
 
-export interface IUsers extends Document {
+export type IUsers = {
   first_name: string;
   last_name: string;
   roles: string[];
@@ -66,5 +65,5 @@ const usersSchema = new Schema(
 
 applyPasswordHashing(usersSchema);
 
-const Users = model<IUsers>("Users", usersSchema);
-export default Users;
+const User = model("User", usersSchema);
+export default User;

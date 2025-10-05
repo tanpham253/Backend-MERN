@@ -18,7 +18,7 @@ Content-Type: application/json
 x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 
 {
-    "email": "admin@gmail.com",
+    "email": "staff@gmail.com",
     "password": "!Qaz123456"
 }
 ### 200
@@ -63,3 +63,13 @@ x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 }
 ### customers routes test
 GET http://localhost:9000/api/v1/products/home/6878dd70c4303577d8af6fa0?limit=5
+###
+PUT http://localhost:9000/api/v1/orders/68dd578b168463065d4106dc
+Content-Type: application/json
+x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDJhODIyZGYxYTg5ZWY1YzVjYmVjNCIsImVtYWlsIjoic3RhZmZAZ21haWwuY29tIiwicm9sZXMiOlsic3RhZmYiXSwiaWF0IjoxNzU5NDkwMTkwLCJleHAiOjE3NjAwOTQ5OTB9.DaJx9neZn5sRNz1Vz9UTd6ioyrHG-_qL1BSnZayZJtI
+
+{
+    "staff": "68d2a822df1a89ef5c5cbec4",
+    "order_status": "4"
+}

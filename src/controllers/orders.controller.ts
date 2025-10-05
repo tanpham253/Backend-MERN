@@ -56,5 +56,5 @@ export default {
     findById,
     create,
     updateById,
-    deleteById
+    deleteById,
 };

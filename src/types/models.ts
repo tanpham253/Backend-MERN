@@ -19,8 +19,6 @@ export interface IStaff extends IStaffEntity{
   id: string;
 }
 
-
-
 export type TCustomer = {
   _id?: ObjectId;
   first_name: string;
@@ -81,8 +79,8 @@ order_items: TOrderItems[],
 }
 
 export interface IOrder {
-  customer?: ObjectId;
-  staff?: ObjectId;
+  customer_id?: ObjectId;
+  staff_id?: ObjectId;
   order_date: Date,
   require_date?: Date,
   shipping_date?: Date,

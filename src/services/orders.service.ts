@@ -4,6 +4,8 @@ import customerService from "./customers.service";
 import { IOrderDTO } from "../types/models";
 import Customer from "../models/customers.model";
 
+// document.populate([{ path: keyString, strictPopulate: false }]);
+
 const findAll = async (query: any) => {
   console.log('<<=== 🚀 query ===>>',query);
   const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by='createdAt', order_status = null, customer_id = null } = query;
@@ -38,8 +40,8 @@ const findAll = async (query: any) => {
     .skip(skip)
     .limit(limit)
     .sort({...sortObject})
-    .populate("customer", "first_name last_name email phone")
-    .populate("staff", "first_name last_name")
+    .populate("customer_id", "first_name last_name email phone")
+    .populate("staff_id", "first_name last_name")
     .populate("order_items.product", "product_name price thumbnail");
   return {
     orders,
@@ -51,8 +53,8 @@ const findAll = async (query: any) => {
 
 const findById = async (id: string) => {
   const order = await Order.findById(id)
-    .populate("customer", "first_name last_name email phone")
-    .populate("staff", "first_name last_name")
+    .populate("customer_id", "first_name last_name email phone")
+    .populate("staff_id", "first_name last_name")
     .populate("order_items.product", "product_name price thumbnail");
   if (!order || order.isDelete) {
     throw createError(400, "Order not found");
@@ -151,5 +153,5 @@ export default {
   findById,
   create,
   deleteById,
-  updateById,
+  updateById
 };
