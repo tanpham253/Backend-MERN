@@ -35,7 +35,7 @@ const usersSchema = new Schema(
     },
     first_name: { type: String, required: false },
     last_name: { type: String, required: false },
-    is_active: { type: Boolean, required: false },
+    is_active: { type: Boolean, required: false, default: true },
   },
   {
     timestamps: false,

@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 import { IOrder, OrderModelType, TOrderItems } from '../types/models';
 
 const orderItemsSchema = new Schema<TOrderItems>({
-  product: {
+  product_id: {
     type: Schema.Types.ObjectId,
     ref: "Product",
     require: true
@@ -25,7 +25,7 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
   customer_id: {
     type: Schema.Types.ObjectId, //_id
     ref: 'Customer',
-    required: true,
+    required: false,
   },
   //Staff là người duyệt đơn, mặc định đơn mới chưa có người duyệt
   staff_id: {
@@ -44,7 +44,7 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
      * 3 = Rejected; 
      * 4 = Completed
      */
-    enum:[1,2,3,4],
+    enum:[1,2,3,4,5,6,7,8,9,10,11],
     default: 1, // mặc định khi tạo đơn mới
   },
   payment_type: {
@@ -57,7 +57,7 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
      * 3 = ATM; 
      * 4 = Cash
      */
-    enum:[1,2,3,4],
+    enum:[1,2,3,4,5,6,7,8,9,10,11],
     default: 4, // mặc định khi tạo đơn mới
   },
   order_date: {
@@ -65,7 +65,7 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
     required: false,
     default: new Date, //mặc định lấy time hiện tại
   },
-  require_date: {
+  completed_date: {
     type: Date,
     required: false,
     default: null, //mặc định null

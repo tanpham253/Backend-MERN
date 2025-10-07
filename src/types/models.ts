@@ -55,7 +55,7 @@ export enum  EnumPayments {
   Cod = 'COD'
 }
 export type TOrderItems = {
-product: ObjectId;
+product_id: ObjectId;
 quantity: number;
 price: number;
 discount: number;
@@ -82,7 +82,7 @@ export interface IOrder {
   customer_id?: ObjectId;
   staff_id?: ObjectId;
   order_date: Date,
-  require_date?: Date,
+  completed_date?: Date,
   shipping_date?: Date,
   order_status: number,
   first_name: string;

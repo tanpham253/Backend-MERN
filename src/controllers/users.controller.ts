@@ -1,11 +1,17 @@
 // users.controller.ts
 import { Request, Response, NextFunction } from 'express';
-import * as usersService from '../services/users.service';
+import usersService from '../services/users.service';
 
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const docs = await usersService.findAll(req.query);
-    res.json(docs);
+    res.json({
+      success: true,
+      data: docs.users,        // ✅ array
+      count: docs.totalRecords, // ✅ pagination count
+      page: docs.page,
+      limit: docs.limit,
+    });
   } catch (error) {
     next(error);
   }

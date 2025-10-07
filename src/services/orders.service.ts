@@ -7,42 +7,59 @@ import Customer from "../models/customers.model";
 // document.populate([{ path: keyString, strictPopulate: false }]);
 
 const findAll = async (query: any) => {
-  console.log('<<=== 🚀 query ===>>',query);
-  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by='createdAt', order_status = null, customer_id = null } = query;
+  console.log("<<=== 🚀 query ===>>", query);
+  const {
+    page = 1,
+    limit = 5,
+    keyword = null,
+    sort_type = "desc",
+    sort_by = "createdAt",
+    order_status = null,
+    customer_id = null,
+  } = query;
 
-  console.log('<<=== 🚀 keyword ===>>',keyword);
+  console.log("<<=== 🚀 keyword ===>>", keyword);
 
   let sortObject = {};
-    sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1 };
+  sortObject = { ...sortObject, [sort_by]: sort_type === "desc" ? -1 : 1 };
 
   const where: any = {};
   //Nếu cần lọc thì đưa vào where
-  if(keyword) {
+  if (keyword) {
     where.$or = [
-      { first_name: { $regex: keyword, $options: 'i' } },
-      { last_name: { $regex: keyword, $options: 'i' } },
-      { email: { $regex: keyword, $options: 'i' } },
-      { phone: { $regex: keyword, $options: 'i' } }
+      { first_name: { $regex: keyword, $options: "i" } },
+      { last_name: { $regex: keyword, $options: "i" } },
+      { email: { $regex: keyword, $options: "i" } },
+      { phone: { $regex: keyword, $options: "i" } },
     ];
   }
-  if(order_status) {
+  if (order_status) {
     where.order_status = order_status;
   }
-  if(customer_id) {
+  if (customer_id) {
     where.customer = customer_id;
   }
 
   const skip = (page - 1) * limit;
   const orders = await Order.find({
     ...where,
-    isDelete: false
+    isDelete: false,
   })
     .skip(skip)
     .limit(limit)
-    .sort({...sortObject})
-    .populate("customer_id", "first_name last_name email phone")
-    .populate("staff_id", "first_name last_name")
-    .populate("order_items.product", "product_name price thumbnail");
+    .sort({ ...sortObject })
+    .populate({
+      path: "order_items.product_id",
+      select: "product_name price thumbnail",
+    })
+    .populate({
+      path: "customer_id",
+      select: "first_name last_name email phone",
+    })
+    .populate({
+      path: "staff_id",
+      select: "first_name last_name email",
+    });
   return {
     orders,
     page,
@@ -53,27 +70,33 @@ const findAll = async (query: any) => {
 
 const findById = async (id: string) => {
   const order = await Order.findById(id)
-    .populate("customer_id", "first_name last_name email phone")
-    .populate("staff_id", "first_name last_name")
-    .populate("order_items.product", "product_name price thumbnail");
+    .populate({
+      path: "order_items.product_id",
+      select: "product_name price thumbnail",
+    })
+    .populate({
+      path: "customer_id",
+      select: "first_name last_name email phone",
+    })
+    .populate({
+      path: "staff_id",
+      select: "first_name last_name email",
+    });
   if (!order || order.isDelete) {
     throw createError(400, "Order not found");
   }
+  console.log("<<=== 🚀 order ===>>", order);
   return order;
 };
 
-const create = async(payload: IOrderDTO) => {
-
+const create = async (payload: IOrderDTO) => {
   //b1. Kiem tra khach hang da ton tai hay chua
- const customerExists = await Customer.findOne({
-    $or: [
-      { email: payload.customer.email },
-      { phone: payload.customer.phone }
-    ] 
-  })
+  const customerExists = await Customer.findOne({
+    $or: [{ email: payload.customer.email }, { phone: payload.customer.phone }],
+  });
 
   //Neu chua thi tao khach hang moi
-  if(!customerExists) {
+  if (!customerExists) {
     const newCustomer = new Customer({
       email: payload.customer.email,
       first_name: payload.customer.first_name,
@@ -88,7 +111,7 @@ const create = async(payload: IOrderDTO) => {
     //tao don moi voi thong tin khach hang moi
     const newOrder = new Order({
       customer: customer._id,
-      order_status:  1,
+      order_status: 1,
       payment_type: payload.payment_type || 4,
       order_date: new Date(),
       order_note: payload.order_note,
@@ -100,7 +123,10 @@ const create = async(payload: IOrderDTO) => {
       city: customer.city,
       state: customer.state,
       zip_code: customer.zip_code,
-      order_items: payload.order_items,
+      order_items: payload.order_items.map((item) => ({
+        product_id: item.product_id,
+        quantity: item.quantity,
+      })),
     });
     return await newOrder.save();
   }
@@ -109,7 +135,7 @@ const create = async(payload: IOrderDTO) => {
     //tao don moi voi thong tin khach hang da ton tai, nhung chi lay id, con lai dua vao payload.customer
     const newOrder = new Order({
       customer: customerExists._id, // chỉ lấy id của khách hàng đã tồn tại
-      order_status:  1,
+      order_status: 1,
       payment_type: payload.payment_type || 4,
       order_date: new Date(),
       order_note: payload.order_note,
@@ -121,12 +147,13 @@ const create = async(payload: IOrderDTO) => {
       city: payload.customer.city,
       state: payload.customer.state,
       zip_code: payload.customer.zip_code,
-      order_items: payload.order_items,
+      order_items: payload.order_items.map((item) => ({
+        product_id: item.product_id,
+        quantity: item.quantity,
+      })),
     });
     return await newOrder.save();
   }
-
-
 };
 
 const updateById = async (id: string, payload: any) => {
@@ -153,5 +180,5 @@ export default {
   findById,
   create,
   deleteById,
-  updateById
+  updateById,
 };
