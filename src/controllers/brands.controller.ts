@@ -5,6 +5,17 @@ import * as brandService from '../services/brands.service';
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const docs = await brandService.findAll();
+    console.log("<<=== 🚀 docs ===>>", docs);
+    res.json(docs);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findAllPage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const docs = await brandService.findAllPage(req.query);
+    console.log("<<=== 🚀 docs ===>>", docs);
     res.json(docs);
   } catch (error) {
     next(error);
@@ -52,5 +63,6 @@ export default {
     findById,
     create,
     deleteById,
-    updateById
+    updateById,
+    findAllPage,
 };

@@ -69,41 +69,43 @@ const getProductsByCategorySlug = async (cate_slug: string, query: any) => {
 /* END PUBLIC SERVICE */
 
 const findAll = async (query: any) => {
-  console.log('<<=== 🚀 query ===>>',query);
-  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by='createdAt', cat_id = null, brand_id = null } = query;
+  console.log('<<=== 🚀 query ===>>', query);
+  const {
+    page = 1,
+    limit = 5,
+    keyword = null,
+    sort_type = 'desc',
+    sort_by = 'createdAt',
+    cat_id = null,
+    brand_id = null,
+  } = query;
 
-  console.log('<<=== 🚀 keyword ===>>',keyword);
-
-  let sortObject = {};
-    sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1 };
+  let sortObject: { [key: string]: 1 | -1 } = { [sort_by as string]: sort_type === 'desc' ? -1 : 1 };
 
   const where: any = {};
-  //Nếu cần lọc thì đưa vào where
-  if(keyword) {
+  if (keyword) {
     where.product_name = { $regex: keyword, $options: 'i' };
   }
-  if(cat_id) {
+  if (cat_id) {
     where.category_id = cat_id;
   }
-  if(brand_id) {
+  if (brand_id) {
     where.brand_id = brand_id;
   }
 
   const skip = (page - 1) * limit;
-  const products = await Product.find({
-    ...where,
-  })
-    .skip(skip)
-    .limit(limit)
-    .sort({...sortObject})
-    .populate("category_id", "category_name")
-    .populate("brand_id", "brand_name");
-  return {
-    products,
-    page,
-    limit,
-    totalRecords: await Product.countDocuments(),
-  };
+
+  const [products, totalRecords] = await Promise.all([
+    Product.find(where)
+      .skip(skip)
+      .limit(limit)
+      .sort(sortObject)
+      .populate("category_id", "category_name")
+      .populate("brand_id", "brand_name"),
+    Product.countDocuments(where),
+  ]);
+
+  return { products, page, limit, totalRecords };
 };
 
 const findById = async (id: string) => {
@@ -144,6 +146,18 @@ const deleteById = async (id: string) => {
   return product;
 };
 
+const findBySlug = async (slug: string) => {
+  const product = await Product.findOne({ slug })
+    .populate("category_id", "category_name slug")
+    .populate("brand_id", "brand_name");
+
+  if (!product) {
+    throw createError(404, "Product not found");
+  }
+
+  return product;
+};
+
 export default {
   findAll,
   findById,
@@ -151,5 +165,6 @@ export default {
   deleteById,
   updateById,
   findHomeProducts,
-  getProductsByCategorySlug
+  getProductsByCategorySlug,
+  findBySlug
 };

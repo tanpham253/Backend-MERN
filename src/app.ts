@@ -9,7 +9,10 @@ import path from 'path';
 const app: Express = express();
 
 import cors from "cors"
-app.use(cors()); // enable All CORS Requests
+app.use(cors({
+  origin: "http://localhost:5173", // or whatever port your frontend runs on (Vite default)
+  credentials: true, // if you send cookies/auth
+}));
 
 // able to parse json, built in middleware
 app.use(express.json()); // to parse json body

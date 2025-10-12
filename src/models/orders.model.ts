@@ -57,7 +57,7 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
      * 3 = ATM; 
      * 4 = Cash
      */
-    enum:[1,2,3,4,5,6,7,8,9,10,11],
+    enum:[1,2,3,4],
     default: 4, // mặc định khi tạo đơn mới
   },
   order_date: {

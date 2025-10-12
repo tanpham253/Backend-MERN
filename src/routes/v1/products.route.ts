@@ -37,6 +37,8 @@ const router = Router();
 router.get('/products/home/:catId', productController.findHomeProducts);
 // GET /api/v1/products/category/:slug
 router.get('/products/category/:slug', productController.getProductsByCategorySlug);
+// GET /api/v1/products/:slug
+router.get('/products/slug/:slug', productController.findBySlug);
 
 /** PRIVATE ROUTES */
 router.get('/products', productController.findAll);

@@ -27,6 +27,7 @@ const findAll = async (query: any) => {
   //Nếu cần lọc thì đưa vào where
   if (keyword) {
     where.$or = [
+      // { _id: { $regex: keyword, $options: "i" } },
       { first_name: { $regex: keyword, $options: "i" } },
       { last_name: { $regex: keyword, $options: "i" } },
       { email: { $regex: keyword, $options: "i" } },
@@ -64,7 +65,7 @@ const findAll = async (query: any) => {
     orders,
     page,
     limit,
-    totalRecords: await Order.countDocuments({ isDelete: false }),
+    totalRecords: await Order.countDocuments({ ...where, isDelete: false }),
   };
 };
 

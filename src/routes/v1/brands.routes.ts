@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/brands', brandController.findAll);
 router.get('/brands/:id', brandController.findById);
+router.get('/brands/page', brandController.findAllPage);
 
 router.post('/brands', authenticateToken, authRoles(["admin", "staff"]), brandController.create);
 router.put('/brands/:id', authenticateToken, authRoles(["admin", "staff"]), brandController.updateById);

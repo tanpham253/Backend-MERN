@@ -93,6 +93,16 @@ const deleteById = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+const findBySlug = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { slug } = req.params;
+    const product = await productsService.findBySlug(slug);
+    sendJsonSuccess(res, product);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
     findAll,
     findById,
@@ -101,5 +111,6 @@ export default {
     deleteById,
     findHomeProducts,
     getProductsByCategorySlug,
-    uploadSingle
+    uploadSingle,
+    findBySlug
 };
