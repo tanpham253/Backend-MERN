@@ -15,7 +15,7 @@
 ### 200
 POST http://localhost:9000/api/v1/auth/login
 Content-Type: application/json
-x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+x-api-key: 6b92W0lULyoh1Fz5mXCkPdtD6x0NzMsa
 
 {
     "email": "staff@gmail.com",
@@ -35,7 +35,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDJhODIyZ
 x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
 ### 200
 get http://localhost:9000/api/v1/brands
-x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
+x-api-key: 6b92W0lULyoh1Fz5mXCkPdtD6x0NzMsa
 ### products routes test
 GET http://localhost:9000/api/v1/orders
 x-api-key: QC5CzhMZoXtlQuzYjeeCBJmS4skbZoHA
@@ -73,3 +73,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDJhODIyZ
     "staff": "68d2a822df1a89ef5c5cbec4",
     "order_status": "4"
 }
+
+###
+GET http://localhost:9000/api/v1/customers
+x-api-key: 6b92W0lULyoh1Fz5mXCkPdtD6x0NzMsa

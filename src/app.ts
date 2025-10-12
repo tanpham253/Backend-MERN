@@ -38,7 +38,7 @@ import categoriesRouter from "./routes/v1/categories.route";
 // products
 import productsRouter from "./routes/v1/products.route";
 // customers
-// import customersRouter from "./routes/v1/customers.route";
+import customersRouter from "./routes/v1/customers.route";
 // orders
 import ordersRouter from "./routes/v1/orders.route";
 // order_items
@@ -86,7 +86,7 @@ app.use('/api/v1/auth', authRouter);
 app.use(compression());
 
 // public
-// app.use("/api/v1", customersRouter);
+app.use("/api/v1", customersRouter);
 app.use("/api/v1", brandRouter);
 app.use("/api/v1", categoriesRouter);
 app.use("/api/v1", productsRouter);
