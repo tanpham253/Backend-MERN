@@ -35,6 +35,8 @@ import usersRouter from "./routes/v1/users.route";
 // app.use("/api/v1", usersRouter); // disable this after create admin
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
+
+import categoriesRouterv2 from "./routes/v2/categories.route";
 // products
 import productsRouter from "./routes/v1/products.route";
 // customers
@@ -89,6 +91,7 @@ app.use(compression());
 app.use("/api/v1", customersRouter);
 app.use("/api/v1", brandRouter);
 app.use("/api/v1", categoriesRouter);
+app.use("/api/v2", categoriesRouterv2);
 app.use("/api/v1", productsRouter);
 
 // app.use(authApiKey);
