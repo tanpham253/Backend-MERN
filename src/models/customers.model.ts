@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
+import { applyPasswordHashing } from "../configs/hashPassword";
 
-interface Customer {
+export type ICustomers = {
+  _id: string;
   first_name: string;
   last_name: string;
   phone: string;
@@ -84,8 +86,30 @@ const customerSchema = new Schema({
 },
 {
   timestamps: true, //Tạo tự động thêm 2 trường createAt, updateAt
+  virtuals: {
+      fullName:{
+        get() {
+          return `${this.first_name} ${this.last_name}`;
+        }
+      }
+    },
+    toJSON: {
+      virtuals: true,
+      transform: (doc,ret) => {
+        delete (ret as { password?: string }).password; // do not return password
+        return ret;
+      }
+    },
+    toObject: {
+      virtuals: true,
+      transform: (doc,ret) => {
+        delete (ret as { password?: string }).password; // do not return password
+        return ret;
+      }
+    }
 });
 
+applyPasswordHashing(customerSchema);
 const Customer = model('Customer', customerSchema);
 
 export default Customer

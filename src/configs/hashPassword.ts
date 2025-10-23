@@ -18,7 +18,7 @@ export function applyPasswordHashing(schema: Schema) {
   });
 
   // pre-update hook (for findOneAndUpdate / findByIdAndUpdate)
-  schema.pre("findOneAndUpdate", async function (next: HookNextFunction) {
+  schema.pre("findOneAndUpdate", async function (next: (err?: any) => void) {
     const update: any = this.getUpdate();
     if (!update.password) return next();
 

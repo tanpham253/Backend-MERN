@@ -15,7 +15,7 @@ export  function  generateToken(user: any) {
   const payload = {
     id: user.id,
     email: user.email,
-    roles: user.roles
+    // roles: user.roles
   };
 
   
@@ -46,9 +46,9 @@ export  function  generateToken(user: any) {
 
 export function verifyToken(token: string) {
   // Thay thế 'your_secret_key' bằng cùng một chuỗi bí mật đã sử dụng để tạo token
-  const secretOrPrivateKey = process.env.JWT_SECRET || 'your_secret_key';
-    // console.log("<<=== 🚀 token ===>>", token);
+    const secretOrPrivateKey = process.env.JWT_SECRET || 'your_secret_key';
+    console.log("<<=== 🚀 token ===>>", token);
     const decoded = jwt.verify(token, secretOrPrivateKey);
-    // console.log("<<=== 🚀 decoded ===>>", decoded);
+    console.log("<<=== 🚀 decoded ===>>", decoded);
     return decoded;
 }

@@ -50,10 +50,51 @@ const deleteById = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const tokens = await customerService.verifyUserByCredentials({
+        email: req.body.email,
+        password: req.body.password,
+    });
+    sendJsonSuccess(res, tokens, "Login successfully");
+  } catch (error) {
+    next(error);
+  }
+};
+
+const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        //Sau khi authenticateToken middleware đã xác thực token và lưu customer vào res.locals.customer
+        //Chúng ta có thể lấy customer từ res.locals.customer
+        const customer = res.locals.customer;
+        // Gọi service để làm mới token dựa vào customer
+        const tokens = await customerService.refreshToken(customer);
+        sendJsonSuccess(res, tokens, "Refresh token successfully");
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+const getProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        //Sau khi authenticateToken middleware đã xác thực token và lưu customer vào res.locals.customer
+        //Chúng ta có thể lấy customer từ res.locals.customer
+        const customer = res.locals.customer;
+        
+        sendJsonSuccess(res, customer, "Successfully");
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     findAll,
     findById,
     create,
     updateById,
-    deleteById
+    deleteById,
+    login,
+    refreshToken,
+    getProfile
 };

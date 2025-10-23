@@ -3,6 +3,7 @@ import { Schema, model, Document } from "mongoose";
 import { applyPasswordHashing } from "../configs/hashPassword";
 
 export type IUsers = {
+  _id: string;
   first_name: string;
   last_name: string;
   roles: string[];

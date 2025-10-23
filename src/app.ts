@@ -32,7 +32,6 @@ app.use(rateLimit({
 
 // users
 import usersRouter from "./routes/v1/users.route";
-// app.use("/api/v1", usersRouter); // disable this after create admin
 // categories
 import categoriesRouter from "./routes/v1/categories.route";
 // products

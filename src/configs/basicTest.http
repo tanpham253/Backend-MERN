@@ -75,5 +75,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDJhODIyZ
 }
 
 ###
-GET http://localhost:9000/api/v1/customers
+GET http://localhost:9000/api/v1/products/68da5fc9d4042eb3781ab884
 x-api-key: 6b92W0lULyoh1Fz5mXCkPdtD6x0NzMsa
+
+###
+POST http://localhost:9000/api/v1/customers/login
+Content-Type: application/json
+x-api-key: 6b92W0lULyoh1Fz5mXCkPdtD6x0NzMsa
+
+{
+    "email": "john@gmail.com",
+    "password": "!Qaz123456"
+}

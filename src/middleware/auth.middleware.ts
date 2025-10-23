@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import createError from "http-errors";
 import User from "../models/users.model";
-import Customer from "../models/customers.model";
 import { decodedJWT, verifyToken } from "../helper/token.helper";
 
 
@@ -12,6 +11,7 @@ export const authenticateToken = async (
 ) => {
   //Get the jwt token from the head
   const authHeader = req.headers["authorization"];
+  console.log('<<=== 🚀 authHeader ===>>',authHeader);
   const token = authHeader && authHeader.split(" ")[1];
 
   console.log('<<=== 🚀 authHeader ===>>',authHeader);

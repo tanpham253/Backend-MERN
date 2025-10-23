@@ -3,7 +3,6 @@ import createError from "http-errors";
 import bcrypt from 'bcrypt'
 import { generateToken } from "../helper/token.helper";
 
-
 const verifyUserByCredentials = async ({
     email,
     password,
@@ -18,6 +17,10 @@ const verifyUserByCredentials = async ({
     }
     //b2. So sánh password
     const passwordHash = user.password;
+    if (!passwordHash) {
+        //Đừng thông báo: Sai mật mật khẩu. Hãy thông báo chung chung
+        throw createError(400, "Invalid email or password")
+    }
     const isValid = await bcrypt.compare(password, passwordHash); // true
     if(!isValid){
         //Đừng thông báo: Sai mật mật khẩu. Hãy thông báo chung chung
