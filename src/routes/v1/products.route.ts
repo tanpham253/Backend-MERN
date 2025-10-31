@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import productController from '../../controllers/products.controller';
 import { authenticateToken } from '../../middleware/auth.middleware';
+import { validateSchemaYup } from '../../middleware/validateSchema.middleware';
+import productValidation from '../../validations/product.validation';
 
 //import multer vào
 import multer from "multer";
 import path from 'path';
 import { buildSlug, buildSlugify } from '../../helper/buildSlug.helper';
+
 // Khởi tạo multer với cấu hình lưu trữ
 const storage = multer.diskStorage({
 
@@ -29,7 +32,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-
 const router = Router();
 
 /** PUBLIC ROUTES */
@@ -41,17 +43,17 @@ router.get('/products/category/:slug', productController.getProductsByCategorySl
 router.get('/products/slug/:slug', productController.findBySlug);
 
 /** PRIVATE ROUTES */
-router.get('/products', productController.findAll);
-router.get('/products/:id', productController.findById);
+router.get('/products', validateSchemaYup(productValidation.findAll), productController.findAll);
+router.get('/products/:id', validateSchemaYup(productValidation.findById), productController.findById);
 
 // POST /api/v1/products
-router.post('/products', upload.single('file'), productController.create);
+router.post('/products', upload.single('file'), validateSchemaYup(productValidation.create), productController.create);
 
 // PUT /api/v1/products/:id
-router.put('/products/:id', productController.updateById);
+router.put('/products/:id', validateSchemaYup(productValidation.updateById), productController.updateById);
 
 // DELETE /api/v1/products/:id
-router.delete('/products/:id', productController.deleteById);
+router.delete('/products/:id', validateSchemaYup(productValidation.deleteById), productController.deleteById);
 
 router.post('/products/upload-single', upload.single('file'), productController.uploadSingle);
 
