@@ -47,21 +47,30 @@ const findById = async (id: string) => {
   return customer;
 };
 
-const create = (payload: any) => {
-  const newCustomer = new Customer({
-    first_name: payload.first_name,
-    last_name: payload.last_name,
-    phone: payload.phone,
-    email: payload.email,
-    street: payload.street,
-    city: payload.city,
-    state: payload.state,
-    zip_code: payload.zip_code,
-    password: payload.password,
-    active: payload.active || true,
+const create = async (payload: any) => {
+  const { email, password } = payload;
+
+  // Check unique email
+  const existing = await Customer.findOne({ email });
+  if (existing) {
+    throw createError(400, "Email already exists");
+  }
+
+  // Hash password before saving
+  const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+
+  const customer = new Customer({
+    ...payload,
+    password: hashedPassword,
   });
-  newCustomer.save();
-  return newCustomer;
+
+  await customer.save();
+  return customer;
+};
+
+const checkEmailExists = async (email: string) => {
+  const exists = await Customer.exists({ email });
+  return !!exists;
 };
 
 const updateById = async (id: string, payload: any) => {
@@ -97,7 +106,7 @@ const verifyUserByCredentials = async ({
         //Đừng thông báo: Sai mật mật khẩu. Hãy thông báo chung chung
         throw createError(400, "Invalid email or password")
     }
-    const isValid = await bcrypt.compare(password, passwordHash); // true
+    const isValid = bcrypt.compare(password, passwordHash); // true
     if(!isValid){
         //Đừng thông báo: Sai mật mật khẩu. Hãy thông báo chung chung
         throw createError(400, "Invalid email or password")
@@ -127,6 +136,7 @@ const getProfile =  async(customer: ICustomers)=>{
 }
 
 
+
 export default {
   findAll,
   findById,
@@ -135,5 +145,6 @@ export default {
   updateById,
   verifyUserByCredentials,
   refreshToken,
-  getProfile
+  getProfile,
+  checkEmailExists
 };

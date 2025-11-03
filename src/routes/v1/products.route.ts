@@ -33,6 +33,8 @@ const upload = multer({ storage: storage })
 const router = Router();
 
 /** PUBLIC ROUTES */
+
+router.get("/products/best-sellers", productController.getBestSellers);
 // GET /api/v1/products/home/:catId?limit=5
 router.get('/products/home/:catId', productController.findHomeProducts);
 // GET /api/v1/products/category/:slug
@@ -40,6 +42,7 @@ router.get('/products/category/:slug', productController.getProductsByCategorySl
 // GET /api/v1/products/:slug
 router.get('/products/slug/:slug', productController.findBySlug);
 
+router.get("/products/latest", productController.getLatestProducts);
 /** PRIVATE ROUTES */
 router.get('/products', productController.findAll);
 router.get('/products/:id', productController.findById);

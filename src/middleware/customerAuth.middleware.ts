@@ -36,7 +36,7 @@ export const customerAuthenticateToken = async (
 
     next();
   } catch (err) {
-    console.error("Token verification failed:", err.message);
+    console.error("Token verification failed:", err);
     return next(createError(403, "Forbidden"));
   }
 };

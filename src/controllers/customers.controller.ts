@@ -88,6 +88,20 @@ const getProfile = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+export const checkEmail = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const exists = await customerService.checkEmailExists(email as string);
+    res.status(200).json({ exists });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
     findAll,
     findById,
@@ -96,5 +110,6 @@ export default {
     deleteById,
     login,
     refreshToken,
-    getProfile
+    getProfile,
+    checkEmail
 };

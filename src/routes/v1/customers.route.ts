@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/customers/login', customersController.login)
 router.post('/customers/refresh-token', customerAuthenticateToken, customersController.refreshToken)
 router.get('/customers/profile', customerAuthenticateToken, customersController.getProfile)
+router.post('/customers/check-email', customersController.checkEmail)
 
 // can use multiple middlewares, can use res to pass variable to next middleware
 router.get("/customers", customersController.findAll); 

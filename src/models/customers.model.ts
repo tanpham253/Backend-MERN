@@ -1,15 +1,16 @@
 import { Schema, model } from 'mongoose';
 import { applyPasswordHashing } from "../configs/hashPassword";
+import { subscribe } from 'diagnostics_channel';
 
 export type ICustomers = {
   _id: string;
   first_name: string;
   last_name: string;
-  phone: string;
+  phone?: string;
   email: string;
-  street: string;
-  city: string;
-  state: string;
+  street?: string;
+  city?: string;
+  state?: string;
   zip_code?: string;
   password?: string | null;
   active?: boolean;
@@ -31,7 +32,6 @@ const customerSchema = new Schema({
   },
   phone: {
     type: String,
-    required: true,
     unique: true,
     maxLength: 50
   },
@@ -43,34 +43,35 @@ const customerSchema = new Schema({
   },
   street: {
     type: String,
-    required: true,
     maxLength: 255
   },
   city: {
     type: String,
-    required: true,
     maxLength: 50
   },
   state: {
     type: String,
-    required: true,
     maxLength: 50
   },
   zip_code: {
     type: String,
     maxLength: 5,
-    require: false,
   },
   password: {
     type: String,
     maxLength: 255,
-    require: false,
+    require: true,
     default: null
   },
   /* Khóa tài khoản */
   active: {
     type: Boolean,
     default: true,
+    require: false
+  },
+  subscribe: {
+    type: Boolean,
+    default: false,
     require: false
   },
   /* 

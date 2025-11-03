@@ -1,4 +1,3 @@
-// discount.service.ts
 import Discount from '../models/discounts.model';
 
 export const findAll = async () => {

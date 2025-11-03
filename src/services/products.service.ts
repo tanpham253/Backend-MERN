@@ -1,8 +1,75 @@
 import createError from "http-errors";
 import Product from "../models/products.model";
 import Category from "../models/categories.model";
+import Order from "../models/orders.model";
 
 /* BEGIN PUBLIC SERVICE */
+
+const findBestSellerProducts = async ({
+  limit = 6,
+  page = 1,
+}: {
+  limit?: number;
+  page?: number;
+}) => {
+  const skip = (page - 1) * limit;
+
+  // Aggregate total quantity sold per product from Order documents
+  const bestSellerStats = await Order.aggregate([
+    { $match: { isDelete: false, order_status: { $ne: 3 } } }, // exclude deleted/rejected
+    { $unwind: "$order_items" },
+    {
+      $group: {
+        _id: "$order_items.product_id",
+        totalSold: { $sum: "$order_items.quantity" },
+      },
+    },
+    { $sort: { totalSold: -1 } },
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "product",
+      },
+    },
+    { $unwind: "$product" },
+    {
+      $project: {
+        _id: "$product._id",
+        product_name: "$product.product_name",
+        thumbnail: "$product.thumbnail",
+        price: "$product.price",
+        discount: "$product.discount",
+        stock: "$product.stock",
+        totalSold: 1,
+        category_id: "$product.category_id",
+        brand_id: "$product.brand_id",
+      },
+    },
+    { $skip: skip },
+    { $limit: limit },
+  ]);
+
+  const totalRecords = await Order.aggregate([
+    { $match: { isDelete: false, order_status: { $ne: 3 } } },
+    { $unwind: "$order_items" },
+    {
+      $group: {
+        _id: "$order_items.product_id",
+      },
+    },
+    { $count: "count" },
+  ]);
+
+  return {
+    products: bestSellerStats,
+    page,
+    limit,
+    totalRecords: totalRecords[0]?.count || bestSellerStats.length,
+  };
+};
+
 const findHomeProducts = async({
   catId,
   limit=5
@@ -14,8 +81,23 @@ const findHomeProducts = async({
     .limit(limit)
     .populate("category_id", "category_name")
     .populate("brand_id", "brand_name");
-    console.log('<<=== 🚀 products Service ===>>', products);
-  console.log('<<=== 🚀 products Service ===>>', products);
+    // console.log('<<=== 🚀 products Service ===>>', products);
+  // console.log('<<=== 🚀 products Service ===>>', products);
+  return products;
+};
+
+// for home page - new arrivals
+const findLatestProducts = async ({
+  limit=8
+}: {limit: number}) => {
+  const products = await Product.find({})
+    .sort({ updatedAt: -1 }) // newest first
+    .limit(limit)
+    .select("-description") // optional: omit heavy fields ???
+    .populate("category_id", "category_name slug")
+    .populate("brand_id", "brand_name");
+
+  // console.log("<<=== 🚀 Latest Products Service ===>>", products);
   return products;
 };
 
@@ -166,5 +248,7 @@ export default {
   updateById,
   findHomeProducts,
   getProductsByCategorySlug,
-  findBySlug
+  findBySlug,
+  findLatestProducts,
+  findBestSellerProducts,
 };

@@ -3,7 +3,22 @@ import { NextFunction, Request, Response } from "express";
 import productsService from "../services/products.service";
 import sendJsonSuccess from "../helper/response.helper";
 
-
+export const getBestSellers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { page = 1, limit = 6 } = req.query;
+    const result = await productsService.findBestSellerProducts({
+      page: Number(page),
+      limit: Number(limit),
+    });
+    res.status(200).json({
+      statusCode: 200,
+      message: "Success",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const uploadSingle = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -24,6 +39,17 @@ const findHomeProducts = async (req: Request, res: Response, next: NextFunction)
     } catch (error) {
         next(error);
     }
+};
+
+const getLatestProducts = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const products = await productsService.findLatestProducts({
+            limit: req.query.limit ? parseInt(req.query.limit as string) : 8
+        });
+    res.json({ success: true, data: products });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const getProductsByCategorySlug = async (req: Request, res: Response, next: NextFunction) => {
@@ -112,5 +138,7 @@ export default {
     findHomeProducts,
     getProductsByCategorySlug,
     uploadSingle,
-    findBySlug
+    findBySlug,
+    getLatestProducts,
+    getBestSellers,
 };

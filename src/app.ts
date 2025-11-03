@@ -8,11 +8,19 @@ import path from 'path';
 //Khởi tạo một ứng dụng Express
 const app: Express = express();
 
-import cors from "cors"
-app.use(cors({
-  origin: "http://localhost:5173", // or whatever port your frontend runs on (Vite default)
-  credentials: true, // if you send cookies/auth
-}));
+import cors from "cors";
+const allowedOrigins = [
+  "http://localhost:4000",
+  "http://localhost:3000", // second origin
+  "http://localhost:5173",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 // able to parse json, built in middleware
 app.use(express.json()); // to parse json body
@@ -68,6 +76,10 @@ import brandRouter from "./routes/v1/brands.routes";
 import notificationsRouter from "./routes/v1/notifications.route";
 // roles
 import rolesRouter from "./routes/v1/roles.routes";
+
+// banners
+import bannersRouter from "./routes/v1/banners.route";
+
 // audit_log
 import auditLogRouter from "./routes/v1/audit_log.route";
 // utilities
@@ -89,6 +101,7 @@ app.use("/api/v1", customersRouter);
 app.use("/api/v1", brandRouter);
 app.use("/api/v1", categoriesRouter);
 app.use("/api/v1", productsRouter);
+app.use("/api/v1", bannersRouter);
 
 // app.use(authApiKey);
 
