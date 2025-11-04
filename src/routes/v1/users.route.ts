@@ -9,11 +9,10 @@ const router = Router();
 
 // router.post('/users', usersController.create);
 
-router.get('/users', usersController.findAll);
-router.get('/users/:id', usersController.findById);
-router.get('/users/:id', usersController.findById);
-router.post('/users', usersController.create);
-router.put('/users/:id',usersController.updateById);
-router.delete('/users/:id', usersController.deleteById);
+router.get('/users', validateSchemaYup(userValidation.findAll), usersController.findAll);
+router.get('/users/:id', validateSchemaYup(userValidation.findById), usersController.findById);
+router.post('/users', validateSchemaYup(userValidation.create), usersController.create);
+router.put('/users/:id', validateSchemaYup(userValidation.updateById), usersController.updateById);
+router.delete('/users/:id', validateSchemaYup(userValidation.deleteById), usersController.deleteById);
 
 export default router;

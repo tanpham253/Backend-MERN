@@ -14,10 +14,10 @@ const router = Router();
 
 
 router.get('/orders', ordersController.findAll);
-router.get('/orders/:id', ordersController.findById);
+router.get('/orders/:id', validateSchemaYup(orderValidation.findById), ordersController.findById);
 
-router.post('/orders', ordersController.create);
-router.put('/orders/:id', ordersController.updateById);
-router.delete('/orders/:id', ordersController.deleteById);
+router.post('/orders', validateSchemaYup(orderValidation.create), ordersController.create);
+router.put('/orders/:id', validateSchemaYup(orderValidation.updateById), ordersController.updateById);
+router.delete('/orders/:id', validateSchemaYup(orderValidation.deleteById), ordersController.deleteById);
 
 export default router;
