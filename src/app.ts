@@ -51,6 +51,8 @@ import cartRouter from "./routes/v1/carts.route";
 import cartItemsRouter from "./routes/v1/cartItems.route";
 // wishlist
 import wishlistRouter from "./routes/v1/wishlists.route";
+// banner slides
+import bannerSlidesRouter from "./routes/v1/bannerSlides.route";
 // review
 import reviewRouter from "./routes/v1/reviews.route";
 // discount
@@ -120,6 +122,7 @@ app.use("/api/v1", notificationsRouter);
 app.use("/api/v1", rolesRouter);
 app.use("/api/v1", auditLogRouter);
 app.use("/api/v1", wishlistRouter);
+app.use("/api/v1", bannerSlidesRouter);
 
 // test
 app.use("/api/v1", testRouter);
