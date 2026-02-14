@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: false })); // to parse urlencoded body
 import { rateLimit } from 'express-rate-limit';
 app.use(rateLimit({
   windowMs: 15 * 60 *1000, // 15 min
-  max: 100, // limit each IP 100 request each above time
+  max: 10000, // limit each IP 100 request each above time
   message: {
     statusCode: 429,
     message: 'Too many requests, please try again later.',

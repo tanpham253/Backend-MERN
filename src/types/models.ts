@@ -25,7 +25,7 @@ export type TCustomer = {
   last_name: string;
   phone: string;
   email: string;
-  street: string;
+  address: string;
   city: string;
   state: string;
   zip_code?: string;
@@ -89,10 +89,10 @@ export interface IOrder {
   last_name: string;
   phone: string;
   email: string;
-  street: string;
+  address: string;
   city: string;
-  state: string;
   zip_code?: string;
+  note?: string;
   payment_type: number,
   order_note?: string,
   order_items: TOrderItems[],

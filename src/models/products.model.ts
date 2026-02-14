@@ -9,6 +9,7 @@ export interface IProduct extends Document {
   model_year: number;
   category_id: ObjectId;
   brand_id: ObjectId;
+  star: number;
   slug: string;
   thumbnail?: string;
   createdAt: Date;

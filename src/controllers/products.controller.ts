@@ -3,7 +3,41 @@ import { NextFunction, Request, Response } from "express";
 import productsService from "../services/products.service";
 import sendJsonSuccess from "../helper/response.helper";
 
-export const getBestSellers = async (req: Request, res: Response, next: NextFunction) => {
+const pageFindProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const search = req.query.search as string | undefined;
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 12;
+    const categorySlug = req.query.categorySlug as string | undefined;
+    const sortBy = (req.query.sortBy as string) || "latest";
+    const minPrice = req.query.minPrice
+      ? parseFloat(req.query.minPrice as string)
+      : undefined;
+    const maxPrice = req.query.maxPrice
+      ? parseFloat(req.query.maxPrice as string)
+      : undefined;
+
+    const products = await productsService.pageFindProducts({
+      page,
+      limit,
+      categorySlug,
+      sortBy: sortBy as any,
+      minPrice,
+      maxPrice,
+      search,
+    });
+
+    sendJsonSuccess(res, products);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getBestSellers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { page = 1, limit = 6 } = req.query;
     const result = await productsService.findBestSellerProducts({
@@ -141,4 +175,5 @@ export default {
     findBySlug,
     getLatestProducts,
     getBestSellers,
+    pageFindProducts
 };

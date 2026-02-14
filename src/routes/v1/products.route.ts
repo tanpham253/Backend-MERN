@@ -34,6 +34,8 @@ const router = Router();
 
 /** PUBLIC ROUTES */
 
+router.get("/products/find-products", productController.pageFindProducts);
+
 router.get("/products/best-sellers", productController.getBestSellers);
 // GET /api/v1/products/home/:catId?limit=5
 router.get('/products/home/:catId', productController.findHomeProducts);

@@ -92,16 +92,14 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
   phone: {
     type: String,
     required: true,
-    unique: true,
     maxLength: 50
   },
   email: {
     type: String,
     required: true,
-    unique: true,
     maxLength: 150
   },
-  street: {
+  address: {
     type: String,
     required: true,
     maxLength: 255
@@ -111,14 +109,14 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
     required: true,
     maxLength: 50
   },
-  state: {
-    type: String,
-    required: true,
-    maxLength: 50
-  },
   zip_code: {
     type: String,
     maxLength: 5,
+    require: false,
+  },
+  note: {
+    type: String,
+    maxLength: 255,
     require: false,
   },
   order_items: [orderItemsSchema], //mảng sản phẩm
@@ -142,8 +140,20 @@ const ordersSchema = new Schema<IOrder, OrderModelType>({
   timestamps: true,
 }
 );
+ordersSchema.virtual("total_cost").get(function () {
+  if (!this.order_items) return 0;
 
+  return this.order_items.reduce((acc: number, item: any) => {
+    // if price not stored, use product_id.price from populate
+    const price = item.price ?? item.product_id?.price ?? 0;
+    const discount = item.discount ?? 0;
+    const qty = item.quantity ?? 0;
 
+    return acc + (price * qty - discount);
+  }, 0);
+});
+ordersSchema.set("toJSON", { virtuals: true });
+ordersSchema.set("toObject", { virtuals: true });
 
 const Order = model<IOrder, OrderModelType>('Order', ordersSchema);
 

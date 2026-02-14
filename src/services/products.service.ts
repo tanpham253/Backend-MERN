@@ -41,10 +41,27 @@ const findBestSellerProducts = async ({
         thumbnail: "$product.thumbnail",
         price: "$product.price",
         discount: "$product.discount",
+        discountedPrice: {
+          $round: [
+            {
+              $subtract: [
+                "$product.price",
+                {
+                  $multiply: [
+                    "$product.price",
+                    { $divide: ["$product.discount", 100] },
+                  ],
+                },
+              ],
+            },
+            2,
+          ],
+        },
         stock: "$product.stock",
         totalSold: 1,
         category_id: "$product.category_id",
         brand_id: "$product.brand_id",
+        star_number: "$product.star_number",
       },
     },
     { $skip: skip },
@@ -70,30 +87,31 @@ const findBestSellerProducts = async ({
   };
 };
 
-const findHomeProducts = async({
+const findHomeProducts = async ({
   catId,
-  limit=5
-}: {catId: string, limit: number}) => {
+  limit = 5,
+}: {
+  catId: string;
+  limit: number;
+}) => {
   const products = await Product.find({
-    category_id: catId
+    category_id: catId,
   })
-  .select("-createdAt -updatedAt -description")
+    .select("-createdAt -updatedAt -description")
     .limit(limit)
     .populate("category_id", "category_name")
     .populate("brand_id", "brand_name");
-    // console.log('<<=== 🚀 products Service ===>>', products);
+  // console.log('<<=== 🚀 products Service ===>>', products);
   // console.log('<<=== 🚀 products Service ===>>', products);
   return products;
 };
 
 // for home page - new arrivals
-const findLatestProducts = async ({
-  limit=8
-}: {limit: number}) => {
+const findLatestProducts = async ({ limit = 8 }: { limit: number }) => {
   const products = await Product.find({})
     .sort({ updatedAt: -1 }) // newest first
     .limit(limit)
-    .select("-description") // optional: omit heavy fields ???
+    .select("-description") // omit heavy fields ???
     .populate("category_id", "category_name slug")
     .populate("brand_id", "brand_name");
 
@@ -101,9 +119,116 @@ const findLatestProducts = async ({
   return products;
 };
 
+const pageFindProducts = async ({
+  limit = 12,
+  page = 1,
+  categorySlug,
+  sortBy = "latest",
+  minPrice,
+  maxPrice,
+  search,
+}: {
+  limit?: number;
+  page?: number;
+  categorySlug?: string;
+  sortBy?: "latest" | "oldest" | "priceAsc" | "priceDesc" | "discount";
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;
+}) => {
+  console.log("<<=== 🚀 pageFindProducts begin ===>>");
+  const skip = (page - 1) * limit;
+  const filter: any = {};
+
+  // Filter by category slug
+  if (categorySlug) {
+    const category = await Category.findOne({ slug: categorySlug });
+    if (!category) {
+      return { products: [], page, limit, totalRecords: 0 };
+    }
+    filter.category_id = category._id;
+  }
+
+  if (search) {
+    filter.product_name = { $regex: search, $options: "i" };
+  }
+
+  // Fetch products from DB
+  const products = await Product.find(filter)
+    .sort({ updatedAt: -1 }) // newest first
+    .skip(skip)
+    .limit(limit * 3) // fetch more to allow post-filtering (optional)
+    .select("-description")
+    .populate("category_id", "category_name slug")
+    .populate("brand_id", "brand_name")
+    .lean();
+
+  // Add discountedPrice manually
+  let productsWithDiscount = products.map((p) => ({
+    ...p,
+    discountedPrice: p.price - (p.price * p.discount) / 100,
+  }));
+
+  // Apply discounted price range filtering
+  if (minPrice !== undefined && maxPrice !== undefined) {
+    productsWithDiscount = productsWithDiscount.filter(
+      (p) => p.discountedPrice >= minPrice && p.discountedPrice <= maxPrice
+    );
+  } else if (minPrice !== undefined) {
+    productsWithDiscount = productsWithDiscount.filter(
+      (p) => p.discountedPrice >= minPrice
+    );
+  } else if (maxPrice !== undefined) {
+    productsWithDiscount = productsWithDiscount.filter(
+      (p) => p.discountedPrice <= maxPrice
+    );
+  }
+
+  // Sorting (after computation)
+  if (sortBy === "oldest") {
+    productsWithDiscount.sort(
+      (a, b) =>
+        new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+    );
+  } else if (sortBy === "priceAsc") {
+    productsWithDiscount.sort((a, b) => a.discountedPrice - b.discountedPrice);
+  } else if (sortBy === "priceDesc") {
+    productsWithDiscount.sort((a, b) => b.discountedPrice - a.discountedPrice);
+  } else if (sortBy === "discount") {
+    productsWithDiscount.sort((a, b) => b.discount - a.discount);
+  } else {
+    // latest (default)
+    productsWithDiscount.sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+  }
+
+  // Paginate again after filtering
+  const totalRecords = productsWithDiscount.length;
+  const paginatedProducts = productsWithDiscount.slice(0, limit);
+
+  const totalPages = Math.ceil(totalRecords / limit);
+
+  return {
+    products: paginatedProducts,
+    page,
+    limit,
+    totalRecords,
+    totalPages,
+  };
+};
+
 const getProductsByCategorySlug = async (cate_slug: string, query: any) => {
-  console.log('<<=== 🚀 query ===>>', query);
-  const { page = 1, limit = 5, keyword = null, sort_type = 'desc', sort_by = 'createdAt', brand_id = null } = query;
+  console.log("<<=== 🚀 query ===>>", query);
+  const {
+    page = 1,
+    limit = 5,
+    keyword = null,
+    sort_type = "desc",
+    sort_by = "createdAt",
+    brand_id = null,
+  } = query;
 
   // Truy vấn category để lấy _id từ slug
   const category = await Category.findOne({ slug: cate_slug });
@@ -111,14 +236,14 @@ const getProductsByCategorySlug = async (cate_slug: string, query: any) => {
     return { products: [], page, limit, totalRecords: 0 };
   }
 
-  console.log('<<=== 🚀 category ===>>', category);
+  console.log("<<=== 🚀 category ===>>", category);
 
   let sortObject = {};
-  sortObject = { ...sortObject, [sort_by]: sort_type === 'desc' ? -1 : 1 };
+  sortObject = { ...sortObject, [sort_by]: sort_type === "desc" ? -1 : 1 };
 
-  let where = { };
+  let where = {};
   if (keyword) {
-    where = { ...where, product_name: { $regex: keyword, $options: 'i' } };
+    where = { ...where, product_name: { $regex: keyword, $options: "i" } };
   }
   if (brand_id) {
     where = { ...where, brand_id };
@@ -127,17 +252,17 @@ const getProductsByCategorySlug = async (cate_slug: string, query: any) => {
   const skip = (page - 1) * limit;
   const products = await Product.find({
     ...where,
-    category_id: category._id
+    category_id: category._id,
   })
     .skip(skip)
     .limit(limit)
     .sort(sortObject)
-    .populate('category_id', 'category_name slug')
-    .populate('brand_id', 'brand_name');
+    .populate("category_id", "category_name slug")
+    .populate("brand_id", "brand_name");
 
   const totalRecords = await Product.countDocuments({
     ...where,
-    category_id: category._id
+    category_id: category._id,
   });
 
   return {
@@ -151,22 +276,24 @@ const getProductsByCategorySlug = async (cate_slug: string, query: any) => {
 /* END PUBLIC SERVICE */
 
 const findAll = async (query: any) => {
-  console.log('<<=== 🚀 query ===>>', query);
+  console.log("<<=== 🚀 query ===>>", query);
   const {
     page = 1,
     limit = 5,
     keyword = null,
-    sort_type = 'desc',
-    sort_by = 'createdAt',
+    sort_type = "desc",
+    sort_by = "createdAt",
     cat_id = null,
     brand_id = null,
   } = query;
 
-  let sortObject: { [key: string]: 1 | -1 } = { [sort_by as string]: sort_type === 'desc' ? -1 : 1 };
+  let sortObject: { [key: string]: 1 | -1 } = {
+    [sort_by as string]: sort_type === "desc" ? -1 : 1,
+  };
 
   const where: any = {};
   if (keyword) {
-    where.product_name = { $regex: keyword, $options: 'i' };
+    where.product_name = { $regex: keyword, $options: "i" };
   }
   if (cat_id) {
     where.category_id = cat_id;
@@ -198,7 +325,7 @@ const findById = async (id: string) => {
   return product;
 };
 
-const create = async(payload: any) => {
+const create = async (payload: any) => {
   const newProduct = new Product({
     product_name: payload.product_name,
     description: payload.description,
@@ -251,4 +378,5 @@ export default {
   findBySlug,
   findLatestProducts,
   findBestSellerProducts,
+  pageFindProducts,
 };

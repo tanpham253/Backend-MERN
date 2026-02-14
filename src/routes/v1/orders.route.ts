@@ -4,11 +4,6 @@ import ordersController from '../../controllers/orders.controller';
 import { authenticateToken, authRoles } from '../../middleware/auth.middleware';
 import { validateSchemaYup } from '../../middleware/validateSchema.middleware';
 import orderValidation from '../../validations/order.validation';
-import { 
-  checkCustomerOwnership, 
-  checkCustomerIdOwnership, 
-  checkCustomerCreateOwnership 
-} from '../../middleware/customerOwnership.middleware';
 
 const router = Router();
 

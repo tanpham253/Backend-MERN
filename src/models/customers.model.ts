@@ -8,9 +8,8 @@ export type ICustomers = {
   last_name: string;
   phone?: string;
   email: string;
-  street?: string;
+  address?: string;
   city?: string;
-  state?: string;
   zip_code?: string;
   password?: string | null;
   active?: boolean;
@@ -41,15 +40,11 @@ const customerSchema = new Schema({
     unique: true,
     maxLength: 150
   },
-  street: {
+  address: {
     type: String,
     maxLength: 255
   },
   city: {
-    type: String,
-    maxLength: 50
-  },
-  state: {
     type: String,
     maxLength: 50
   },

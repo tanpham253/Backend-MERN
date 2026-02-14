@@ -135,8 +135,6 @@ const getProfile =  async(customer: ICustomers)=>{
     return customer
 }
 
-
-
 export default {
   findAll,
   findById,
